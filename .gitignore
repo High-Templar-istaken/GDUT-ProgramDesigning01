@@ -1,0 +1,5 @@
+*.o
+goal.txt
+Makefile.win
+*.exe
+*.layout
