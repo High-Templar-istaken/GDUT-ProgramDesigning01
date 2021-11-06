@@ -1,6 +1,6 @@
 #include "mycheck.h"
 
-void ShowAllRow()
+void DEBUGShowAllRow()
 {
 	if(DEBUG)
 	{
@@ -13,7 +13,7 @@ void ShowAllRow()
 			PKEY nowkey = (*nowrow).keybegin;
 			while(nowkey != NULL)
 			{
-				printf("header=%s WHILE Value=%s ||", (*nowkey).header, (*nowkey).value);
+				printf("header=%s WHILE Value=%s||", (*nowkey).header, (*nowkey).value);
 				nowkey = (*nowkey).nxtkey;
 			}
 			putchar('\n');

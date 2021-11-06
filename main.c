@@ -1,8 +1,7 @@
 #include "mycheck.h"
-
 /* run this program using the console pauser or add your own getch, system("pause") or input loop */
 
-bool DEBUG = false;
+const bool DEBUG = true;
 PROW rowbegin;
 PHEADER headerbegin;
 

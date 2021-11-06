@@ -18,6 +18,8 @@
 #define PHEADER struct header*
 
 /*global var*/
+extern const bool DEBUG;
+
 struct key
 {
 	struct key *nxtkey;
@@ -40,7 +42,6 @@ struct header
 	struct header *nxtheader;
 	struct header *lasheader;
 };
-extern bool DEBUG;
 extern struct header* headerbegin;
 
 #endif

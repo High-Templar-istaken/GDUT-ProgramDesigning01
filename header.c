@@ -1,6 +1,6 @@
 #include "mycheck.h"
 
-void ShowAllHeader()
+void DEBUGShowAllHeader()
 {
 	if(DEBUG)
 	{
