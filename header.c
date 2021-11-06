@@ -1,5 +1,17 @@
 #include "mycheck.h"
 
+struct header* QueryHeader(char *targetheader)
+{
+	PHEADER nowheader = headerbegin;
+	
+	while(nowheader != NULL)
+	{
+		if(strcmp((*nowheader).id, targetheader)) break;
+		nowheader = (*nowheader).nxtheader;
+	}
+	return nowheader;
+}
+
 void ReleaseShowAllHeader()
 {
 	PROW nowrow = rowbegin;
@@ -37,7 +49,7 @@ void ReadAllHeader(FILE *stream)
 	if(DEBUG) printf("debug: In function 'ReadTheHeader': source=%s",line);
 	
 	PHEADER now = NULL;
-	char tmp[10001];
+	char *tmp = (char*) malloc (sizeof(char)*MAX_INPUT_CACHE);
 	bool firstheader = true;
 	
 	int j = 0, i = 0;
@@ -80,7 +92,7 @@ void ReadAllHeader(FILE *stream)
 		}
 		(*now).id = (char*) malloc(sizeof(char)*(strlen(tmp)+1));
 		strcpy((*now).id, tmp);
-		while(line[j] == ' ' || line[j] == ':') ++j; //skip the devide char ' '&':'
+		while(line[j] == ':') ++j; //skip the devide char ' '&':'
 		
 		//read second chapter
 		i = 0;
@@ -94,5 +106,6 @@ void ReadAllHeader(FILE *stream)
 		while(line[j] == ' ' || line[j] == ':') ++j; //skip the devide char ' '&':'
 	}
 	
+	free(tmp);
 	return;
 }

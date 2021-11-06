@@ -46,19 +46,23 @@ int analyze(int argc, char *argv[])
 			switch(i)
 			{
 				case 1:if(DEBUG) printf("debug: refresh!\n");
+					 back = refresh(argc, argv);
 					break;//refresh
-				case 2:if(DEBUG)  	printf("debug: display!\n");
-		  			 back=display(argc,argv);
+				case 2:if(DEBUG) printf("debug: display!\n");
+		  			 back = display(argc, argv);
 					break;//display
-				case 3:
+				case 3:if(DEBUG) printf("debug: help\n");
+					 back = gethelp(argc, argv);
 					break;//help
-				case 4:
+				case 4:if(DEBUG) printf("debug: init\n"); 
+					 back = getinit(argc, argv);
 					break;//init
-				case 5:
+				case 5:if(DEBUG) printf("debug: header\n");
+					 back = getheader(argc,argv);
 					break;//header
 				case 6:
 					break;//row
-				case 7:printf("query: display!\n");
+				case 7:
 					break;//query
 				case 8:
 					break;//sort

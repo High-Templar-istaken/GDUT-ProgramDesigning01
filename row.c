@@ -5,22 +5,18 @@ void ReleaseShowAllRow()
 	PROW nowrow = rowbegin;
 	PHEADER nowheader = headerbegin;
 	PKEY nowkey = NULL;
+	
 	while(nowrow != NULL)
 	{
 		nowheader = headerbegin;
 		
 		while(nowheader != NULL)
 		{
-			nowkey = (*nowrow).keybegin;
-			while(nowkey != NULL)
-			{
-				if(strcmp((*nowheader).id, (*nowkey).header) == 0)
-				{
-					printf("%s\t",(*nowkey).value);
-					break;
-				}
-				nowkey = (*nowkey).nxtkey;
-			}
+			nowkey = QueryKey(nowrow,(*nowheader).id);
+			
+			if(nowkey == NULL) printf("#\t"); //There is no such key in this table
+			else printf("%s\t",(*nowkey).value);
+			
 			nowheader = (*nowheader).nxtheader;
 		}
 		putchar('\n');
@@ -98,7 +94,7 @@ struct key* RowDevide(char *source)
 	
 	PKEY keybegin = NULL;
 	PKEY now = NULL;
-	char tmp[10001];
+	char *tmp = (char*) malloc (sizeof(char)*MAX_INPUT_CACHE);
 	bool firstkey = true;
 	
 	int j = 0, i = 0;
@@ -141,7 +137,7 @@ struct key* RowDevide(char *source)
 		}
 		(*now).header = (char*) malloc(sizeof(char)*(strlen(tmp)+1));
 		strcpy((*now).header, tmp);
-		while(source[j] == ' ' || source[j] == ':') ++j; //skip the devide char ' '&':'
+		while(source[j] == ':') ++j; //skip the devide char ' '&':'
 		
 		//read second chapter
 		i = 0;
@@ -149,11 +145,17 @@ struct key* RowDevide(char *source)
 		{
 			tmp[i++]=source[j++];
 		}
-		tmp[i]='\0';
+		tmp[i] = '\0';
+		if(strlen(tmp) == 0)
+		{
+			tmp[0] = '#';
+			tmp[1] = '\0';
+		}
 		(*now).value = (char*) malloc(sizeof(char)*(strlen(tmp)+1));
 		strcpy((*now).value, tmp);
+		
 		while(source[j] == ' ' || source[j] == ':') ++j; //skip the devide char ' '&':'
 	}
-	
+	free(tmp);
 	return keybegin;
 }
