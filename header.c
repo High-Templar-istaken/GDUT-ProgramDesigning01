@@ -1,5 +1,19 @@
 #include "mycheck.h"
 
+void ReleaseShowAllHeader()
+{
+	PROW nowrow = rowbegin;
+	PHEADER nowheader = headerbegin;
+	PKEY nowkey = NULL;
+	
+	while(nowheader != NULL)
+	{
+		printf("%s\t",(*nowheader).name);
+		nowheader = (*nowheader).nxtheader;
+	}
+	putchar('\n');
+}
+
 void DEBUGShowAllHeader()
 {
 	if(DEBUG)
@@ -15,7 +29,7 @@ void DEBUGShowAllHeader()
 	}
 }
 
-void ReadTheHeader(FILE *stream)
+void ReadAllHeader(FILE *stream)
 {
 	char *line = NULL;
 	_templar_GetTightString_Getline(&line, stream);//firstline end with '\n'

@@ -13,6 +13,8 @@
 #include "display.h"
 #include "header.h" 
 #include "row.h"
+#include "table.h"
+
 #define PKEY struct key*
 #define PROW struct row*
 #define PHEADER struct header*

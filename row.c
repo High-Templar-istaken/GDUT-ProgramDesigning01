@@ -1,5 +1,34 @@
 #include "mycheck.h"
 
+void ReleaseShowAllRow()
+{
+	PROW nowrow = rowbegin;
+	PHEADER nowheader = headerbegin;
+	PKEY nowkey = NULL;
+	while(nowrow != NULL)
+	{
+		nowheader = headerbegin;
+		
+		while(nowheader != NULL)
+		{
+			nowkey = (*nowrow).keybegin;
+			while(nowkey != NULL)
+			{
+				if(strcmp((*nowheader).id, (*nowkey).header) == 0)
+				{
+					printf("%s\t",(*nowkey).value);
+					break;
+				}
+				nowkey = (*nowkey).nxtkey;
+			}
+			nowheader = (*nowheader).nxtheader;
+		}
+		putchar('\n');
+		nowrow = (*nowrow).nxtrow;
+	}
+	return;
+}
+
 void DEBUGShowAllRow()
 {
 	if(DEBUG)
@@ -22,6 +51,7 @@ void DEBUGShowAllRow()
 		
 		printf("---debugend---\n");
 	}
+	return;
 }
 
 void ReadAllRow(FILE *stream)
@@ -59,6 +89,7 @@ void ReadAllRow(FILE *stream)
 		}
 		(*nowrow).keybegin = RowDevide(line);
 	}while(true);
+	return;
 }
 
 struct key* RowDevide(char *source)

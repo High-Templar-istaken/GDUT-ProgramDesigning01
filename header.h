@@ -1,7 +1,8 @@
 #ifndef _MYCHECK_HEADEROPERATION
 #define _MYCHECK_HEADEROPERATION
 
+void ReleaseShowAllHeader();
 void DEBUGShowAllHeader();
-void ReadTheHeader(FILE*);
+void ReadAllHeader(FILE*);
 
 #endif
