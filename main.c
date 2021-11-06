@@ -2,23 +2,28 @@
 
 /* run this program using the console pauser or add your own getch, system("pause") or input loop */
 
+bool DEBUG = true;
+struct header* rowbegin;
+struct header* headerbegin;
+
 int main(int argc, char *argv[])
 {
-//	system("chcp 65001"); //set charset to UTF-8
+	system("chcp 65001"); //set charset to UTF-8
 	
 	switch(analyze(argc,argv))
 	{
+		case 0:printf("Program End safely.\n");
+			break;
 		case -1:printf("Fatal Error: No argument input!\n");
 			break;
-		case -2:printf("Error: Unknown command type\n");
+		case -2:printf("Error: Unknown command type when analyzing\n");
 			break;
-		case -3:printf("Error: Failed to get return\n");
+		case -3:printf("Error: Run time error\n");
 			break;
-		default:printf("Error: Unexpected return value\n");
+		default:printf("Error: Unexpected return value from function 'analyze'\n");
 			break;
 	}
 	
-	return 0;
 	/*
 	system("pause");
 	system("chcp 936");   //set charset back to GBK
