@@ -5,7 +5,7 @@ void _templar_GetTightString_Getline(char **_templar_StringName, FILE *stream)
 	
 	*_templar_StringName = NULL;
 	
-	const int _templar_MaxLength=1001;
+	const int _templar_MaxLength=MAX_INPUT_CACHE;
 	char *_templar_tmp = NULL;
 	
 	_templar_tmp = (char*)malloc(sizeof(char) * _templar_MaxLength);

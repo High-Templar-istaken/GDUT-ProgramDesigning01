@@ -22,23 +22,16 @@ int display(int argc, char *argv[])
 	FILE *WorkReader = fopen("./.mycheck/working.txt", "r");
 	
 	// reading the header of this file 
-	char *firstline = NULL;
-	_templar_GetTightString_Getline(&firstline, WorkReader);//firstline end with '\n'
+	ReadTheHeader(WorkReader);
 	
-	//devide the headers
-	HeaderDevide(firstline);
+	//debug: output all header
+	ShowAllHeader();
 	
-	if(DEBUG)
-	{
-		printf("-----debug----\nHEADER that read\n");
-		struct header* workinglist = headerbegin;
-		while(workinglist!=NULL)
-		{
-			printf("id:%s WHILE name=%s\n", (*workinglist).id , (*workinglist).name);
-			workinglist = (*workinglist).nxtheader;
-		}
-		printf("---debugend---\n");
-	}
+	// fill the in-program row
+ 	ReadAllRow(WorkReader);
+	
+	//debug: display all row
+	ShowAllRow();
 	
 	if(DEBUG) printf("debug: Display safely\n");
 	return 0;
