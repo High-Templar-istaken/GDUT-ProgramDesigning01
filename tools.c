@@ -16,3 +16,31 @@ void _templar_GetTightString_Getline(char **_templar_StringName, FILE *stream)
 	
 	return;
 }
+
+int _templar_StringToInt(char *str)
+{
+	int i = 0;
+	int back = 0;
+	int pn = 1;// positive or negative
+	if(!isdigit(str[0]))
+	{
+		if(str[0] == '-')
+		{
+			pn = -1;
+		}
+		++i;
+	}
+	for(;i<strlen(str);++i)
+	{
+		if(isdigit(str[i]))
+		{
+			back=back*10+str[i]-'0';
+		}
+		else
+		{
+			printf("Error: In function 'StringToInt': '%s' is not a number\n",str);
+			exit(0);
+		}
+	}
+	return back*pn;
+}

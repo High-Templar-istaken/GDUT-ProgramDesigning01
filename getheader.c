@@ -1,38 +1,83 @@
 #include "mycheck.h"
 
+void moveheader(PHEADER moving,int targetcode,bool direct)// 0:forward ; 1:backward
+/*0 means the replaced node will be pushed back*/
+/*1 means the replaced node will be poped front*/
+{
+	//spj
+	if(maxheader == 1) return;
+	
+	PHEADER now = NULL;
+	/*delete*/
+	DeleteHeader(moving);
+	DebugPrintTable();
+	
+	now = QueryHeaderCode(targetcode);
+	if(now == NULL)
+	{
+		printf("WTF, how can you make that? Destination not found but the mission launched ?\n");
+		exit(0);
+	}
+	
+}
+
 void getheader_m_mode(char *filename, char* id,char *offset)
 {
+	FILE *stream = fopen(filename,"r");
+	ReadTable(stream);
+	fclose(stream); stream = NULL;
 	if(!isdigit(offset[0]))
 	{
-		if(offset[0] != '^' && offset[0] != '&')
+		if(offset[0] != ',' && offset[0] != '.')
 		{
-			printf("Error: In function 'getheader_m_mode': Direction mark of '%s' is not '^' or '&'\n", offset);
+			printf("Error: In function 'getheader_m_mode': Direction mark of '%s' is not ',' or '.'\n", offset);
 			exit(0);
 		}
 		if(offset[1] == '\0')
 		{
 			printf("Error: In function 'getheader_m_mode': No distance argument in '%s'!\n", offset);
 			exit(0);
-	 	} 
-		if(offset[0] == '^')
+		} 
+		
+		PHEADER nowheader = QueryHeaderID(id);
+		if(nowheader == NULL)
 		{
-			
+			printf("Error: In function 'getheader_m_mode': HeaderID '%s' unexisted!\n", id);
+			exit(0);
 		}
-		else
+		int step = _templar_StringToInt(offset+1), target;
+		
+		if(step == 0)
 		{
+			return;
+		}
+		
+		if(offset[0] == ',') //forword
+		{
+			if((*nowheader).code == 1) return;
+			target = (*nowheader).code - step;
+			if(DEBUG) printf("debug: '%s' %d step(s) forward WHILE target site=%d\n",id,step,target);
 			
+			if(target <= 0) target = 1;
+			if(target > maxheader) target = maxheader;
+			moveheader(nowheader, target, 0);
+		}
+		else //backward
+		{
+			if((*nowheader).code == maxheader) return;
+			target = (*nowheader).code + step;
+			if(DEBUG) printf("debug: '%s' %d step(s) forward WHILE target site=%d\n",id,step,target);
+			
+			if(target <= 0) target = 1;
+			if(target > maxheader) target = maxheader;
+			moveheader(nowheader, target, 1);
 		}
 	}
 	else
 	{
-		for(int i=0;i<strlen(offset);++i)
-		{
-			if(!isdigit(offset[i]))
-			{
-				printf("Error: In function 'getheader_m_mode': Not all chars of the argument '%s' is digit\n", offset);
-				exit(0);
-			}
-		}
+		int step = _templar_StringToInt(offset);
+		int target = step;
+		if(DEBUG) printf("debug: '%s' move to %d\n",id,target);
 	}
 }
 
@@ -42,7 +87,7 @@ void getheader_n_mode(char *filename, char* id, char* displayname)
 	
 	FILE *stream = fopen(filename,"r");
 	ReadTable(stream);
-	if(QueryHeader(id) != NULL)
+	if(QueryHeaderID(id) != NULL)
 	{
 		printf("Error: In function 'getheader_n_mode': new header's ID '%s' already existed!\n",id);
 		exit(0);
@@ -108,6 +153,7 @@ void getheader_argument(int argc,char *argv[])
 			getheader_m_mode("./.mycheck/working.txt",argv[i+1],argv[i+2]);
 //			getheader_m_mode("./.mycheck/storage.txt",argv[i+1],argv[i+2]);
 			i+=2;
+			return;
 		}
 		else if(strcmp(argv[i],"-d") == 0)
 		{

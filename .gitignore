@@ -1,5 +1,5 @@
 *.o
-goal.txt
+*.txt
 Makefile.win
 *.exe
 *.layout

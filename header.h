@@ -4,6 +4,8 @@
 void ReleaseShowAllHeader();
 void DEBUGShowAllHeader();
 void ReadAllHeader(FILE*);
-struct header* QueryHeader(char *);
+struct header* QueryHeaderID(char *);
+struct header* QueryHeaderCode(int);
+void DeleteHeader(PHEADER);
 
 #endif

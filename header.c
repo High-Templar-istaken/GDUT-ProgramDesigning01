@@ -1,10 +1,53 @@
 #include "mycheck.h"
 
-struct header* QueryHeader(char *targetheader)
+
+void DeleteHeader(PHEADER del)
 {
+	//spj
+	if(maxheader == 1)
+	{
+		headerbegin = NULL;
+		maxheader = 0;
+		noheader = true;
+		free(del);
+		return;
+	}
+	
+	PHEADER now = NULL;
+	PHEADER pre = NULL;
+	PHEADER nxt = NULL;
+	/*delete*/
+	if((*del).code == 1) // headerbegin
+	{
+		nxt = (*del).nxtheader;
+		
+		(*nxt).lasheader = NULL;
+		headerbegin = nxt;
+	}
+	else if((*del).code == maxheader) //headerend
+	{
+		pre = (*del).lasheader;
+		
+		(*pre).nxtheader = NULL;
+	}
+	else
+	{
+		pre = (*del).lasheader;
+		nxt = (*del).nxtheader;
+		
+		(*pre).nxtheader = nxt;
+		(*nxt).lasheader = pre;
+	}
+	free(del);
+	return;
+}
+
+struct header* QueryHeaderID(char *targetheader)
+{
+	if(DEBUG) printf("debug: In function 'QueryHeaderID': targetheader = '%s'\n",targetheader);
 	if(noheader == true)
 	{
-		if(DEBUG) printf("debug: In function 'debug': No Header!\n");
+		if(DEBUG) printf("debug: In function 'QueryHeaderID': No Header already existed!\n");
 		return NULL;
 	}
 	
@@ -13,6 +56,26 @@ struct header* QueryHeader(char *targetheader)
 	while(nowheader != NULL)
 	{
 		if(strcmp((*nowheader).id, targetheader) == 0) break;
+		nowheader = (*nowheader).nxtheader;
+	}
+	return nowheader;
+}
+
+struct header* QueryHeaderCode(int code)
+{
+	printf("temp: anyonealive>%d\n",code);
+	if(DEBUG) printf("debug: In function 'QueryHeaderCode': targetcode = '%d'\n",code);
+	if(noheader == true)
+	{
+		if(DEBUG) printf("debug: In function 'QueryHeaderCode': No Header already existed!\n");
+		return NULL;
+	}
+	
+	PHEADER nowheader = headerbegin;
+	
+	while(nowheader != NULL)
+	{
+		if((*nowheader).code == code) break;
 		nowheader = (*nowheader).nxtheader;
 	}
 	return nowheader;
@@ -32,8 +95,8 @@ void ReleaseShowAllHeader()
 	
 	while(nowheader != NULL)
 	{
-		printf("%s",(*nowheader).name);
-		if(showcode == true) printf("(%d)",(*nowheader).code);
+		if(showcode == true) printf("%s(%d)", (*nowheader).id, (*nowheader).code);
+		else printf("%s",(*nowheader).name);
 		nowheader = (*nowheader).nxtheader;
 		putchar('\t');
 	}
@@ -56,7 +119,7 @@ void DEBUGShowAllHeader()
 		while(currentlist != NULL)
 		{
 			printf("id:%s WHILE name=%s", (*currentlist).id , (*currentlist).name);
-			if(showcode) printf("(%d)",(*currentlist).code);
+			printf("(%d)",(*currentlist).code);
 			currentlist = (*currentlist).nxtheader;
 			putchar('\n');
 		}
@@ -69,11 +132,12 @@ void ReadAllHeader(FILE *stream)
 	char *line = NULL;
 	_templar_GetTightString_Getline(&line, stream);//firstline end with '\n'
 	
+	headerbegin = NULL;
+	
 	if(strcmp(line,"\n") == 0 || strcmp(line," \n") == 0)
 	{
 		if(DEBUG) printf("debug: In function 'ReadAllHeader': no header!\n");
 		noheader = true;
-		headerbegin = NULL;
 	}
 	else noheader = false;
 	

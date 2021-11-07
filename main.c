@@ -9,10 +9,11 @@ PHEADER headerbegin;
 bool noheader;
 bool norow;
 bool showcode = false;
+int maxrow,maxheader;
 
 int main(int argc, char *argv[])
 {
-	if(DEBUG) system("cls");
+//	if(DEBUG) system("cls");
 	system("@chcp 65001"); //set charset to UTF-8
 	
 	switch(analyze(argc,argv))
