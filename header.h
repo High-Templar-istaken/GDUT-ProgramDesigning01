@@ -1,13 +1,13 @@
 #ifndef _MYCHECK_HEADEROPERATION
 #define _MYCHECK_HEADEROPERATION
 
-struct header* NewHeader_PushFrontOf(PHEADER place, char *id, char *name);
-struct header* NewHeader_PushBackOf(PHEADER place, char *id, char *name);
+struct header* InsertHeader_PushFrontOf(PHEADER place, PHEADER tobenew);
+struct header* InsertHeader_PushBackOf(PHEADER place, PHEADER tobenew);
 void ReleaseShowAllHeader();
 void DEBUGShowAllHeader();
 void ReadAllHeader(FILE*);
 struct header* QueryHeaderID(char *);
 struct header* QueryHeaderCode(int);
-void DeleteHeader(PHEADER);
+void DeleteHeader(PHEADER del, bool truedelete);
 
 #endif

@@ -20,7 +20,7 @@ int main(int argc, char *argv[])
 			break;
 		case -1:printf("Fatal Error: No argument input!\n");
 			break;
-		case -2://printf("Error: Unknown command type when analyzing\n");
+		case -2:printf("Error: Unknown command type when analyzing\n");
 			break;
 		case -3:printf("Error: Run time error\n");
 			break;

@@ -1,80 +1,67 @@
 #include "mycheck.h"
 
-struct header* NewHeader_PushFrontOf(PHEADER place, char *id, char *name) //place in the front of 'place'
+struct header* InsertHeader_PushFrontOf(PHEADER place, PHEADER tobenew) //place in the front of 'place'
 {
-	//create now
-	PHEADER now = NULL;
-	now = (struct header*) malloc(sizeof(struct header));
-	(*now).id = id;
-	(*now).name = name;
-	(*now).lasheader = (*now).nxtheader = NULL;
-	
-	
 	if(place == NULL)
 	{
-		(*now).nxtheader = NULL;
-		(*now).lasheader = NULL;
-		headerbegin = now;
-		return now;
+		(*tobenew).nxtheader = NULL;
+		(*tobenew).lasheader = NULL;
+		headerbegin = tobenew;
+		return tobenew;
 	}
 	
 	if((*place).lasheader == NULL) //front of the list
 	{
 		//don't need to care about the front node
-		(*now).nxtheader = place; // don't need to take over the front node
-		(*place).lasheader = now;
+		(*tobenew).nxtheader = place; // don't need to take over the front node
+		(*place).lasheader = tobenew;
+		
+		headerbegin = tobenew;
 	}
 	else
 	{
 		//care about the front node
-		(*(*place).lasheader).nxtheader = now;
+		(*(*place).lasheader).nxtheader = tobenew;
 		
-		(*now).lasheader = (*place).lasheader;
-		(*now).nxtheader = place;
+		(*tobenew).lasheader = (*place).lasheader;
+		(*tobenew).nxtheader = place;
 		
-		(*place).lasheader = now;
+		(*place).lasheader = tobenew;
 	}
-	return now;
+	return tobenew;
 }
 
-struct header* NewHeader_PushBackOf(PHEADER place, char *id, char *name) //place in the back of 'place'
+struct header* InsertHeader_PushBackOf(PHEADER place, PHEADER tobenew) //place in the back of 'place'
 {
-	printf("id='%s' name='%s'\n",id,name);
 	//create now
-	PHEADER now = NULL;
-	now = (struct header*) malloc(sizeof(struct header));
-	(*now).id = id;
-	(*now).name = name;
-	(*now).lasheader = (*now).nxtheader = NULL;
-	
 	if(place == NULL)
 	{
-		(*now).nxtheader = NULL;
-		(*now).lasheader = NULL;
-		headerbegin = now;
-		return now;
+		(*tobenew).nxtheader = NULL;
+		(*tobenew).lasheader = NULL;
+		headerbegin = tobenew;
+		return tobenew;
 	}
 	
 	if((*place).nxtheader == NULL) //back of the list
 	{
 		//don't need to care about the back node
-		(*now).lasheader = place; // don't need to take over the back node
-		(*place).nxtheader = now;
+		(*tobenew).lasheader = place; // don't need to take over the back node
+		(*place).nxtheader = tobenew;
 	}
 	else
 	{
 		//care about the back node
-		(*(*place).nxtheader).lasheader = now;
+		(*(*place).nxtheader).lasheader = tobenew;
 		
-		(*now).nxtheader = (*place).nxtheader;
-		(*now).lasheader = place;
+		(*tobenew).nxtheader = (*place).nxtheader;
+		(*tobenew).lasheader = place;
 		
-		(*place).nxtheader = now;
+		(*place).nxtheader = tobenew;
 	}
-	return now;
+	return tobenew;
 }
 
-void DeleteHeader(PHEADER del)
+void DeleteHeader(PHEADER del, bool truedelete)
 {
 	//spj
 	if(maxheader == 1)
@@ -110,7 +97,12 @@ void DeleteHeader(PHEADER del)
 		(*pre).nxtheader = nxt;
 		(*nxt).lasheader = pre;
 	}
-	free(del);
+	if(truedelete == true) free(del);
+	else
+	{
+		(*del).lasheader = NULL;
+		(*del).nxtheader = NULL;
+	}
 	return;
 }
 
@@ -215,13 +207,19 @@ void ReadAllHeader(FILE *stream)
 	if(DEBUG) printf("debug: In function 'ReadAllHeader': source=%s",line);
 	
 	PHEADER las = headerbegin;
+	PHEADER now = NULL;
 	char *tmp = (char*) malloc (sizeof(char)*MAX_INPUT_CACHE);
 	
-	char *tmpid, *tmpname;
 	int j = 0, i = 0;
 	while(line[j] == ' ') ++j;
+	
+	
 	while(line[j] != '\n')
 	{
+		now = (struct header*) malloc(sizeof(struct header));
+		(*now).nxtheader = NULL;
+		(*now).lasheader = NULL;
+		
 		// read first line
 		i = 0;
 		while(line[j]!=':')
@@ -239,8 +237,8 @@ void ReadAllHeader(FILE *stream)
 			printf("Error: In function 'ReadAllHeader' Empty Header ID!\n");
 			exit(0);
 		}
-		tmpid = (char*) malloc(sizeof(char)*(strlen(tmp)+1));
-		strcpy(tmpid, tmp);
+		(*now).id = (char*) malloc(sizeof(char)*(strlen(tmp)+1));
+		strcpy((*now).id, tmp);
 		while(line[j] == ':') ++j; //skip the devide char ' '&':'
 		
 		//read second chapter
@@ -250,10 +248,9 @@ void ReadAllHeader(FILE *stream)
 			tmp[i++]=line[j++];
 		}
 		tmp[i]='\0';
-		tmpname = (char*) malloc(sizeof(char)*(strlen(tmp)+1));
-		strcpy(tmpname, tmp);
-		las = NewHeader_PushBackOf(las, tmpid, tmpname);
-		//free(tmpname);free(tmpid); Shouldnt be free because struct pointed at them
+		(*now).name = (char*) malloc(sizeof(char)*(strlen(tmp)+1));
+		strcpy((*now).name, tmp);
+		las = InsertHeader_PushBackOf(las, now);
 		while(line[j] == ' ' || line[j] == ':') ++j; //skip the devide char ' '&':'
 	}
 	

@@ -4,13 +4,14 @@ void moveheader(PHEADER moving,int targetcode,bool direct)// 0:forward ; 1:backw
 /*0 means the replaced node will be pushed back*/
 /*1 means the replaced node will be poped front*/
 {
+	printf("temp: moving!");
 	//spj
 	if(maxheader == 1) return;
 	
 	PHEADER now = NULL;
 	/*delete*/
-	DeleteHeader(moving);
-	DebugPrintTable();
+	DeleteHeader(moving, false);
+	
 	
 	now = QueryHeaderCode(targetcode);
 	if(now == NULL)
@@ -18,7 +19,9 @@ void moveheader(PHEADER moving,int targetcode,bool direct)// 0:forward ; 1:backw
 		printf("WTF, how can you make that? Destination not found but the mission launched ?\n");
 		exit(0);
 	}
-	
+	if(direct == 0) InsertHeader_PushFrontOf(now, moving);
+	if(direct == 1) InsertHeader_PushBackOf(now, moving);
+	ReleasePrintTable();
 }
 
 void getheader_m_mode(char *filename, char* id,char *offset)
@@ -75,10 +78,13 @@ void getheader_m_mode(char *filename, char* id,char *offset)
 	}
 	else
 	{
-		int step = _templar_StringToInt(offset);
-		int target = step;
-		if(DEBUG) printf("debug: '%s' move to %d\n",id,target);
+		printf("error: In function 'getheader_m_mode': No direction mark like ',' or '.' in argument '%s\n'",offset);
+		exit(0);
 	}
+	stream = fopen(filename,"w");
+	WriteTable(stream);
+	fclose(stream); stream = NULL;
+	
 }
 
 void getheader_n_mode(char *filename, char* id, char* displayname)
@@ -151,7 +157,7 @@ void getheader_argument(int argc,char *argv[])
 				exit(0);
 			}
 			getheader_m_mode("./.mycheck/working.txt",argv[i+1],argv[i+2]);
-//			getheader_m_mode("./.mycheck/storage.txt",argv[i+1],argv[i+2]);
+			getheader_m_mode("./.mycheck/storage.txt",argv[i+1],argv[i+2]);
 			i+=2;
 			return;
 		}
