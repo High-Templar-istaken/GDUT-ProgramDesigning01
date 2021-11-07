@@ -4,5 +4,6 @@
 void ReadTable(FILE* stream);
 void ReleasePrintTable();
 void DebugPrintTable();
+void WriteTable(FILE* stream);
 
 #endif

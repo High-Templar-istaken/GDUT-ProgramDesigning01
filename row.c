@@ -5,6 +5,11 @@ void ReleaseShowAllRow()
 	PROW nowrow = rowbegin;
 	PHEADER nowheader = headerbegin;
 	PKEY nowkey = NULL;
+	if(norow == true)
+	{
+		printf("THERE IS NO ROW\n");
+		return;
+	}
 	
 	while(nowrow != NULL)
 	{
@@ -14,11 +19,13 @@ void ReleaseShowAllRow()
 		{
 			nowkey = QueryKey(nowrow,(*nowheader).id);
 			
-			if(nowkey == NULL) printf("#\t"); //There is no such key in this table
-			else printf("%s\t",(*nowkey).value);
+			if(nowkey == NULL) printf("#"); //There is no such key in this table
+			else printf("%s",(*nowkey).value);
 			
+			putchar('\t');
 			nowheader = (*nowheader).nxtheader;
 		}
+		if(showcode) printf("\t :(%d)",(*nowrow).code);
 		putchar('\n');
 		nowrow = (*nowrow).nxtrow;
 	}
@@ -30,6 +37,13 @@ void DEBUGShowAllRow()
 	if(DEBUG)
 	{
 		printf("-----debug----\nROW that read\n");
+		if(norow == true)
+		{
+			printf("----norow----\n");
+			printf("---debugend---\n");
+			return;
+		}
+		
 		PROW nowrow = rowbegin;
 		
 		while(nowrow != NULL)
@@ -42,6 +56,7 @@ void DEBUGShowAllRow()
 				nowkey = (*nowkey).nxtkey;
 			}
 			putchar('\n');
+			if(showcode) printf("\t :(%d)",(*nowrow).code);
 			nowrow = (*nowrow).nxtrow;
 		}
 		
@@ -61,7 +76,18 @@ void ReadAllRow(FILE *stream)
 	{
 		//get input
 		_templar_GetTightString_Getline(&line, stream);
-		if(strcmp(line, "\n") == 0) break;
+		if(newrow == true && (strcmp(line,"\n") == 0 || strcmp(line," \n") == 0))
+		{
+			if(DEBUG) printf("debug: In function 'ReadAllRow': no row!\n");
+			norow = true;
+			rowbegin = NULL;
+		}
+		else
+		{
+			norow = false;
+		}
+		
+		if(strcmp(line,"\n") == 0 || strcmp(line," \n") == 0) break;
 		
 		//create a new row
 		if(newrow == true)
@@ -98,6 +124,7 @@ struct key* RowDevide(char *source)
 	bool firstkey = true;
 	
 	int j = 0, i = 0;
+	while(source[j] == ' ') ++j;
 	while(source[j] != '\n')
 	{
 		// create a new key
@@ -125,14 +152,14 @@ struct key* RowDevide(char *source)
 			tmp[i++]=source[j++];
 			if(source[j]==' '||source[j]=='\n')
 			{
-				printf("Error: In function 'HeaderDevide' Wrong format in the header of Working list!\n");
+				printf("Error: In function 'RowDevide' Wrong format in the header of Working list!\n");
 				exit(0);
 			}
 		}
 		tmp[i]='\0';
 		if(strlen(tmp) == 0)
 		{
-			printf("Error: In function 'HeaderDevide' Empty Header ID!\n");
+			printf("Error: In function 'RowDevide' Empty Header ID!\n");
 			exit(0);
 		}
 		(*now).header = (char*) malloc(sizeof(char)*(strlen(tmp)+1));

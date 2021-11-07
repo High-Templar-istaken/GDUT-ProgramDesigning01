@@ -72,7 +72,7 @@ int analyze(int argc, char *argv[])
 					break;//modify
 				case 11:
 					break;//clean
-				default:
+				default:printf("Error: In function 'analyze': Unknown command '%s'\n",argv[1]);
 					break;//WTF
 			}
 			return back;

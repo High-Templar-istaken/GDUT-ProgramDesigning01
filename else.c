@@ -36,45 +36,22 @@ int gethelp(int argc,char *argv[])
 
 int getinit(int argc,char *argv[])
 {
-	bool confirm = false;
 	for(int i = 2; argv[i] != NULL ; ++i)
 	{
-		if(strcmp(argv[i],"-y") == 0)
-		{
-			confirm = true;
-		}
-		else
-		{
-			printf("Error: In function 'getinit': Unknown input argument '%s'\n", argv[i]);
-			exit(0);
-		}
+		printf("Error: In function 'getinit': Unknown input argument '%s'\n", argv[i]);
+		exit(0);
 	}
-	if(confirm == true)
-	{
-		system("rd /s /q .mycheck");
-		system("mkdir .mycheck");
-		
-		system("type nul > ./.mycheck/working.txt");
-		system("echo.>> ./.mycheck/working.txt");
-		system("echo.>> ./.mycheck/working.txt");
-		
-		system("type nul > ./.mycheck/storage.txt");
-		system("echo.>> ./.mycheck/storage.txt");
-		system("echo.>> ./.mycheck/storage.txt");
-	}
-	if(confirm == false)
-	{
-		system("rd .mycheck");
-		system("mkdir .mycheck");
-		
-		system("type nul >> ./.mycheck/working.txt");
-		system("echo.>> ./.mycheck/working.txt");
-		system("echo.>> ./.mycheck/working.txt");
-		
-		system("type nul >> ./.mycheck/storage.txt");
-		system("echo.>> ./.mycheck/storage.txt");
-		system("echo.>> ./.mycheck/storage.txt");
-	}
+	
+	system("rd /s /q .mycheck");
+	system("mkdir .mycheck");
+	
+	system("type nul > ./.mycheck/working.txt");
+	system("echo.>> ./.mycheck/working.txt");
+	system("echo.>> ./.mycheck/working.txt");
+	
+	system("type nul > ./.mycheck/storage.txt");
+	system("echo.>> ./.mycheck/storage.txt");
+	system("echo.>> ./.mycheck/storage.txt");
 	system("cls");
 	printf("Initialize complete\n");
 	

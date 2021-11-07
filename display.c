@@ -4,12 +4,12 @@
 int display(int argc, char *argv[])
 {
 	// grammar check & arguments set
-	bool ShowInvisible=false;
+	showcode=false;
 	for(int i = 2; i < argc; ++i)
 	{
-		if(strcmp(argv[i],"-v")==0) // -v argument stands for 'show inVisible'
+		if(strcmp(argv[i],"-c")==0) // -v argument stands for 'show inVisible'
 		{
-			ShowInvisible=true;
+			showcode = true;
 		}
 		else
 		{
