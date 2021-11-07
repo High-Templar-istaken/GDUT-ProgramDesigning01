@@ -5,7 +5,7 @@ void ReleaseShowAllRow()
 	PROW nowrow = rowbegin;
 	PHEADER nowheader = headerbegin;
 	PKEY nowkey = NULL;
-	if(norow == true)
+	if(rowbegin == NULL)
 	{
 		printf("THERE IS NO ROW\n");
 		return;
@@ -37,7 +37,7 @@ void DEBUGShowAllRow()
 	if(DEBUG)
 	{
 		printf("-----debug----\nROW that read\n");
-		if(norow == true)
+		if(rowbegin == NULL)
 		{
 			printf("----norow----\n");
 			printf("---debugend---\n");
@@ -69,31 +69,22 @@ void ReadAllRow(FILE *stream)
 {
 	// fill the in-program row
 	char *line = NULL;
- 	bool newrow = true;
  	PROW nowrow = NULL;
  	PKEY nowkey = NULL;
+ 	rowbegin = NULL;
 	do
 	{
 		//get input
 		_templar_GetTightString_Getline(&line, stream);
-		if(newrow == true && (strcmp(line,"\n") == 0 || strcmp(line," \n") == 0))
+		if(strcmp(line,"\n") == 0 || strcmp(line," \n") == 0)
 		{
-			if(DEBUG) printf("debug: In function 'ReadAllRow': no row!\n");
-			norow = true;
-			rowbegin = NULL;
+			if(rowbegin == NULL && DEBUG)  printf("debug: In function 'ReadAllRow': no row!\n");
+			return;
 		}
-		else
-		{
-			norow = false;
-		}
-		
-		if(strcmp(line,"\n") == 0 || strcmp(line," \n") == 0) break;
 		
 		//create a new row
-		if(newrow == true)
+		if(rowbegin == NULL)
 		{
-			newrow = false;
-			
 			nowrow = (PROW) malloc(sizeof(struct row));
 			(*nowrow).nxtrow = NULL;
 			(*nowrow).lasrow = NULL;

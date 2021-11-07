@@ -19,7 +19,6 @@ struct row
 	int code;
 };
 extern struct row* rowbegin;
-extern bool norow;
 
 struct header
 {
@@ -30,7 +29,7 @@ struct header
 };
 extern struct header* headerbegin;
 extern const int MAX_INPUT_CACHE;
-extern bool noheader,showcode;
+extern bool showcode;
 extern int maxrow,maxheader; 
 
 #define PKEY struct key*

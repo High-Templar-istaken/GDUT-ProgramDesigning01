@@ -1,5 +1,78 @@
 #include "mycheck.h"
 
+struct header* NewHeader_PushFrontOf(PHEADER place, char *id, char *name) //place in the front of 'place'
+{
+	//create now
+	PHEADER now = NULL;
+	now = (struct header*) malloc(sizeof(struct header));
+	(*now).id = id;
+	(*now).name = name;
+	(*now).lasheader = (*now).nxtheader = NULL;
+	
+	
+	if(place == NULL)
+	{
+		(*now).nxtheader = NULL;
+		(*now).lasheader = NULL;
+		headerbegin = now;
+		return now;
+	}
+	
+	if((*place).lasheader == NULL) //front of the list
+	{
+		//don't need to care about the front node
+		(*now).nxtheader = place; // don't need to take over the front node
+		(*place).lasheader = now;
+	}
+	else
+	{
+		//care about the front node
+		(*(*place).lasheader).nxtheader = now;
+		
+		(*now).lasheader = (*place).lasheader;
+		(*now).nxtheader = place;
+		
+		(*place).lasheader = now;
+	}
+	return now;
+}
+
+struct header* NewHeader_PushBackOf(PHEADER place, char *id, char *name) //place in the back of 'place'
+{
+	printf("id='%s' name='%s'\n",id,name);
+	//create now
+	PHEADER now = NULL;
+	now = (struct header*) malloc(sizeof(struct header));
+	(*now).id = id;
+	(*now).name = name;
+	(*now).lasheader = (*now).nxtheader = NULL;
+	
+	if(place == NULL)
+	{
+		(*now).nxtheader = NULL;
+		(*now).lasheader = NULL;
+		headerbegin = now;
+		return now;
+	}
+	
+	if((*place).nxtheader == NULL) //back of the list
+	{
+		//don't need to care about the back node
+		(*now).lasheader = place; // don't need to take over the back node
+		(*place).nxtheader = now;
+	}
+	else
+	{
+		//care about the back node
+		(*(*place).nxtheader).lasheader = now;
+		
+		(*now).nxtheader = (*place).nxtheader;
+		(*now).lasheader = place;
+		
+		(*place).nxtheader = now;
+	}
+	return now;
+}
 
 void DeleteHeader(PHEADER del)
 {
@@ -8,7 +81,6 @@ void DeleteHeader(PHEADER del)
 	{
 		headerbegin = NULL;
 		maxheader = 0;
-		noheader = true;
 		free(del);
 		return;
 	}
@@ -45,7 +117,7 @@ void DeleteHeader(PHEADER del)
 struct header* QueryHeaderID(char *targetheader)
 {
 	if(DEBUG) printf("debug: In function 'QueryHeaderID': targetheader = '%s'\n",targetheader);
-	if(noheader == true)
+	if(headerbegin == NULL)
 	{
 		if(DEBUG) printf("debug: In function 'QueryHeaderID': No Header already existed!\n");
 		return NULL;
@@ -65,7 +137,7 @@ struct header* QueryHeaderCode(int code)
 {
 	printf("temp: anyonealive>%d\n",code);
 	if(DEBUG) printf("debug: In function 'QueryHeaderCode': targetcode = '%d'\n",code);
-	if(noheader == true)
+	if(headerbegin == NULL)
 	{
 		if(DEBUG) printf("debug: In function 'QueryHeaderCode': No Header already existed!\n");
 		return NULL;
@@ -87,7 +159,7 @@ void ReleaseShowAllHeader()
 	PHEADER nowheader = headerbegin;
 	PKEY nowkey = NULL;
 	
-	if(noheader == true)
+	if(headerbegin == NULL)
 	{
 		printf("No Header!\n");
 		return;
@@ -108,7 +180,7 @@ void DEBUGShowAllHeader()
 	if(DEBUG)
 	{
 		printf("-----debug----\nHEADER that read\n");
-		if(noheader == true)
+		if(headerbegin == NULL)
 		{
 			printf("No Header!\n");
 			printf("---debugend---\n");
@@ -137,38 +209,19 @@ void ReadAllHeader(FILE *stream)
 	if(strcmp(line,"\n") == 0 || strcmp(line," \n") == 0)
 	{
 		if(DEBUG) printf("debug: In function 'ReadAllHeader': no header!\n");
-		noheader = true;
+		return;
 	}
-	else noheader = false;
 	
 	if(DEBUG) printf("debug: In function 'ReadAllHeader': source=%s",line);
 	
-	PHEADER now = NULL;
+	PHEADER las = headerbegin;
 	char *tmp = (char*) malloc (sizeof(char)*MAX_INPUT_CACHE);
-	bool firstheader = true;
 	
+	char *tmpid, *tmpname;
 	int j = 0, i = 0;
 	while(line[j] == ' ') ++j;
 	while(line[j] != '\n')
 	{
-		// create a new node
-		if(firstheader != true)
-		{
-			(*now).nxtheader = (struct header*) malloc(sizeof(struct header));
-			(*(*now).nxtheader).lasheader = now;
-			now = (*now).nxtheader;
-			(*now).nxtheader = NULL;
-		}
-		else
-		{
-			now = (struct header*) malloc(sizeof(struct header));
-			(*now).nxtheader = NULL;
-			(*now).lasheader = NULL;
-			headerbegin = now;
-			
-			firstheader = false;
-		}
-		
 		// read first line
 		i = 0;
 		while(line[j]!=':')
@@ -186,8 +239,8 @@ void ReadAllHeader(FILE *stream)
 			printf("Error: In function 'ReadAllHeader' Empty Header ID!\n");
 			exit(0);
 		}
-		(*now).id = (char*) malloc(sizeof(char)*(strlen(tmp)+1));
-		strcpy((*now).id, tmp);
+		tmpid = (char*) malloc(sizeof(char)*(strlen(tmp)+1));
+		strcpy(tmpid, tmp);
 		while(line[j] == ':') ++j; //skip the devide char ' '&':'
 		
 		//read second chapter
@@ -197,8 +250,10 @@ void ReadAllHeader(FILE *stream)
 			tmp[i++]=line[j++];
 		}
 		tmp[i]='\0';
-		(*now).name = (char*) malloc(sizeof(char)*(strlen(tmp)+1));
-		strcpy((*now).name, tmp);
+		tmpname = (char*) malloc(sizeof(char)*(strlen(tmp)+1));
+		strcpy(tmpname, tmp);
+		las = NewHeader_PushBackOf(las, tmpid, tmpname);
+		//free(tmpname);free(tmpid); Shouldnt be free because struct pointed at them
 		while(line[j] == ' ' || line[j] == ':') ++j; //skip the devide char ' '&':'
 	}
 	

@@ -93,7 +93,7 @@ void getheader_n_mode(char *filename, char* id, char* displayname)
 		exit(0);
 	}
 	
-	if(noheader == true)
+	if(headerbegin == NULL)
 	{
 		headerbegin = (PHEADER) malloc(sizeof(struct header));
 		(*headerbegin).nxtheader = (*headerbegin).lasheader = NULL;

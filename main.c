@@ -6,8 +6,6 @@ const int MAX_INPUT_CACHE=10001;
 
 PROW rowbegin;
 PHEADER headerbegin;
-bool noheader;
-bool norow;
 bool showcode = false;
 int maxrow,maxheader;
 
