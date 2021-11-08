@@ -2,6 +2,9 @@
 
 void getrow_n_mode(char *filename, int argc, char* argv[])
 {
+	PROW nowrow = NULL;
+	nowrow = (PROW) malloc(sizeof(struct row));
+	
 	FILE *stream = fopen(filename,"r");
 	ReadTable(stream);
 	fclose(stream); stream = NULL;
@@ -17,13 +20,36 @@ void getrow_n_mode(char *filename, int argc, char* argv[])
 		exit(0);
 	}
 	
+	(*nowrow).truekey = ++maxtruekey;
+	(*nowrow).nxtrow = (*nowrow).lasrow = NULL;
+	(*nowrow).keybegin = (*nowrow).keyend = NULL;
+	
 	PHEADER nowheader = headerbegin;
+	PKEY nowkey = NULL;
+	int cnt = 3;
+	
 	while(nowheader != NULL)
 	{
+		nowkey = (PKEY) malloc(sizeof(struct key));
+		(*nowkey).nxtkey = (*nowkey).laskey = NULL;
 		
+		(*nowkey).value = (char*) malloc(sizeof(char)*strlen(argv[cnt]));
+		strcpy((*nowkey).value, argv[cnt]);
+		++cnt;
+		
+		(*nowkey).header = (char*) malloc(sizeof(char)*strlen((*nowheader).id));
+		strcpy((*nowkey).header, (*nowheader).id);
+		
+		InsertKey_BackOf((*nowrow).keyend, nowkey, nowrow);
 		
 		nowheader = (*nowheader).nxtheader;
 	}
+	
+	InsertRow_BackOf(rowend, nowrow);
+	DebugPrintTable();
+	stream = fopen(filename,"w");
+	WriteTable(stream);
+	fclose(stream); stream = NULL;
 }
 
 void getrow_argument(int argc,char *argv[])
@@ -39,7 +65,7 @@ void getrow_argument(int argc,char *argv[])
 			}
 			//operating both lists
 			getrow_n_mode("./.mycheck/working.txt",argc,argv);
-//			getheader_n_mode("./.mycheck/storage.txt",argv[i+1],argv[i+2],(argv[i+3] == '\0')?"#":argv[i+3]);
+			getrow_n_mode("./.mycheck/storage.txt",argc,argv);
 			return;
 		}
 		/*

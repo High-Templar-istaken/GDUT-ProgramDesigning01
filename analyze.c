@@ -60,7 +60,8 @@ int analyze(int argc, char *argv[])
 				case 5:if(DEBUG) printf("debug: header\n");
 					 back = getheader(argc,argv);
 					break;//header
-				case 6:
+				case 6:if(DEBUG) printf("debug: row\n");
+					 back = getrow(argc, argv);
 					break;//row
 				case 7:
 					break;//query

@@ -54,6 +54,7 @@ extern int maxtruekey;
 #include "key.h"
 #include "else.h"
 #include "getheader.h"
+#include "getrow.h"
 #include "encode.h"
 
 #include "table.h"
