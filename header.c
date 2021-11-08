@@ -128,7 +128,6 @@ struct header* QueryHeaderID(char *targetheader)
 
 struct header* QueryHeaderCode(int code)
 {
-	printf("temp: anyonealive>%d\n",code);
 	if(DEBUG) printf("debug: In function 'QueryHeaderCode': targetcode = '%d'\n",code);
 	if(headerbegin == NULL)
 	{
@@ -238,6 +237,7 @@ void ReadAllHeader_HeaderPart(FILE *stream)
 	if(strcmp(line,"\n") == 0 || strcmp(line," \n") == 0)
 	{
 		if(DEBUG) printf("debug: In function 'ReadAllHeader_HeaderPart': no header!\n");
+		printf("There is no header. The table is probably empty!\n");
 		return;
 	}
 	

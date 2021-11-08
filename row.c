@@ -1,5 +1,17 @@
 #include "mycheck.h"
 
+PKEY QueryKeyHeader(PROW inrow, char *target)
+{
+	if(DEBUG) printf("debug: In function 'QueryKeyHeader': rowcode=%d WHILE target=%s\n",(*inrow).code,target);
+	PKEY nowkey = (*inrow).keybegin;
+	while(nowkey != NULL)
+	{
+		if(strcmp((*nowkey).header, target) == 0) break;
+		nowkey = (*nowkey).nxtkey;
+	}
+	return nowkey;
+}
+
 void ReleaseShowAllRow()
 {
 	PROW nowrow = rowbegin;
@@ -78,6 +90,7 @@ void ReadAllRow(FILE *stream)
 	{
 		//get input
 		_templar_GetTightString_Getline(&line, stream);
+		
 		if(DEBUG) printf("debug: In function 'ReadAllRow': Row that read:%s\n", line,strlen(line));
 		for(int i=0;i<strlen(line);++i)
 		{
@@ -120,7 +133,13 @@ void ReadAllRow(FILE *stream)
 
 struct key* RowDevide(char *source)
 {
-	if(DEBUG) printf("debug: In function 'RowDevide': source=%s",source);
+	if(DEBUG) printf("debug: In function 'RowDevide': source=%s\n",source);
+	
+	if(strcmp(source,"\n") == 0 || strcmp(source," \n") == 0)
+	{
+		if(DEBUG) printf("debug: In function 'RowDevide': No key at all!\n");
+		return NULL;
+	}
 	
 	PKEY keybegin = NULL;
 	PKEY now = NULL;

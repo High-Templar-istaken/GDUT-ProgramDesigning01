@@ -45,11 +45,11 @@ int getinit(int argc,char *argv[])
 	system("rd /s /q .mycheck");
 	system("mkdir .mycheck");
 	
-	system("type nul > ./.mycheck/working.txt");
+	system("echo.> ./.mycheck/working.txt");
 	system("echo.>> ./.mycheck/working.txt");
 	system("echo.>> ./.mycheck/working.txt");
 	
-	system("type nul > ./.mycheck/storage.txt");
+	system("echo.> ./.mycheck/storage.txt");
 	system("echo.>> ./.mycheck/storage.txt");
 	system("echo.>> ./.mycheck/storage.txt");
 	system("cls");

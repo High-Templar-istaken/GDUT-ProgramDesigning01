@@ -4,6 +4,7 @@
 void ReleaseShowAllRow();
 void DEBUGShowAllRow();
 void ReadAllRow(FILE*);
-struct key* RowDevide(char *);
+PKEY RowDevide(char *);
+PKEY QueryKeyHeader(PROW inrow, char *target);
 
 #endif

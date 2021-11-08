@@ -1,7 +1,7 @@
 #include "mycheck.h"
 /* run this program using the console pauser or add your own getch, system("pause") or input loop */
 
-const bool DEBUG = true;
+const bool DEBUG = false;
 const int MAX_INPUT_CACHE=10001;
 
 PROW rowbegin;

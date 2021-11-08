@@ -4,7 +4,6 @@ void moveheader(PHEADER moving,int targetcode,bool direct)// 0:forward ; 1:backw
 /*0 means the replaced node will be pushed back*/
 /*1 means the replaced node will be poped front*/
 {
-	printf("temp: moving!");
 	//spj
 	if(maxheader == 1) return;
 	
@@ -21,7 +20,57 @@ void moveheader(PHEADER moving,int targetcode,bool direct)// 0:forward ; 1:backw
 	}
 	if(direct == 0) InsertHeader_PushFrontOf(now, moving);
 	if(direct == 1) InsertHeader_PushBackOf(now, moving);
-	ReleasePrintTable();
+}
+
+/*
+1: default
+2: name
+*/
+void getheader_d_mode(char *filename, char *id)
+{
+	FILE *stream = fopen(filename,"r");
+	ReadTable(stream);
+	fclose(stream); stream = NULL;
+	
+	PHEADER tobe = QueryHeaderID(id);
+	if(tobe == NULL)
+	{
+		printf("Error: In function 'getheader_d_mode': No such ID '%s'!",id);
+		exit(0);
+	}
+	DeleteHeader(tobe,true);
+	
+	stream = fopen(filename,"w");
+	WriteTable(stream);
+	fclose(stream); stream = NULL;
+}
+
+void getheader_c_mode(char *filename, int changecode, char *id, char *newvalue)
+{
+	FILE *stream = fopen(filename,"r");
+	ReadTable(stream);
+	fclose(stream); stream = NULL;
+	
+	PHEADER tobe = QueryHeaderID(id);
+	if(tobe == NULL)
+	{
+		printf("Error: In function 'getheader_c_mode': No such ID '%s'!",id);
+		exit(0);
+	}
+	if(changecode == 1) //default
+	{
+		free((*tobe).def);
+		(*tobe).def = newvalue;
+	}
+	else if(changecode == 2)
+	{
+		free((*tobe).def);
+		(*tobe).name = newvalue;
+	}
+	
+	stream = fopen(filename,"w");
+	WriteTable(stream);
+	fclose(stream); stream = NULL;
 }
 
 void getheader_m_mode(char *filename, char* id,char *offset)
@@ -87,14 +136,14 @@ void getheader_m_mode(char *filename, char* id,char *offset)
 	
 }
 
-void getheader_n_mode(char *filename, char* id, char* displayname)
+void getheader_n_mode(char *filename, char* id, char* displayname,char *def)
 {
 	if(DEBUG) printf("debug: stream=%s -> getheader_n_mode -> id=%s displayname=%s\n",filename,id,displayname);
 	
 	FILE *stream = fopen(filename,"r");
-	printf("read..\n");
 	ReadTable(stream);
-	printf("red..\n");
+	fclose(stream); stream = NULL;
+	
 	if(QueryHeaderID(id) != NULL)
 	{
 		printf("Error: In function 'getheader_n_mode': new header's ID '%s' already existed!\n",id);
@@ -106,16 +155,56 @@ void getheader_n_mode(char *filename, char* id, char* displayname)
 	(*nowheader).nxtheader = (*nowheader).lasheader = NULL;
 	(*nowheader).id = id;
 	(*nowheader).name = displayname;
-	(*nowheader).def = "#";
+	(*nowheader).def = def;
 	
 	InsertHeader_PushBackOf(headerend, nowheader);
 	
 	DebugPrintTable();
-	fclose(stream);
+	
 	stream = fopen(filename,"w");
 	WriteTable(stream);
 	fclose(stream);
 	stream = NULL;
+}
+
+void getheader_rn_mode(char *filename, char* id, char *newid)
+{
+	FILE *stream = fopen(filename,"r");
+	ReadTable(stream);
+	fclose(stream); stream = NULL;
+	
+	PHEADER nowheader;
+	PROW nowrow = rowbegin;
+	PKEY nowkey = NULL;
+	
+	nowheader = QueryHeaderID(id);
+	if(nowheader == NULL)
+	{
+		printf("Error: In function 'getheader_rn_mode': No such header ID '%s'!\n",id);
+		exit(0);
+	}
+	
+	free((*nowheader).id);
+	(*nowheader).id = newid;
+	
+	while(nowrow != NULL)
+	{
+		nowkey = QueryKeyHeader(nowrow,id);
+		if(nowkey == NULL)
+		{
+			if(DEBUG) printf("debug: In row(%d): No such key!\n",(*nowrow).code);
+			continue;
+		}
+		if(DEBUG) printf("In row(%d): KEY FOUNDED, value=%s\n",(*nowrow).code,(*nowkey).value);
+		
+		free((*nowkey).header);
+		(*nowkey).header = newid;
+		nowrow = (*nowrow).nxtrow;
+	}
+	
+	stream = fopen(filename,"w");
+	WriteTable(stream);
+	fclose(stream); stream = NULL;
 }
 
 void getheader_argument(int argc,char *argv[])
@@ -130,8 +219,24 @@ void getheader_argument(int argc,char *argv[])
 				exit(0);
 			}
 			//operating both lists
-			getheader_n_mode("./.mycheck/working.txt",argv[i+1],argv[i+2]);
-			getheader_n_mode("./.mycheck/storage.txt",argv[i+1],argv[i+2]);
+			getheader_n_mode("./.mycheck/working.txt",argv[i+1],argv[i+2],(argv[i+3] == '\0')?"#":argv[i+3]);
+			getheader_n_mode("./.mycheck/storage.txt",argv[i+1],argv[i+2],(argv[i+3] == '\0')?"#":argv[i+3]);
+			i+=2;
+			return;
+		}
+		else if(strcmp(argv[i],"-c=default") == 0 || strcmp(argv[i],"-c=name") == 0)
+		{
+			if(argv[i+1] == NULL || argv[i+2] == NULL)
+			{
+				printf("Error: In function 'getheader': Wrong format of argument '-c'\n");
+				exit(0);
+			}
+			int changecode = 0;
+			if(strcmp(argv[i],"-c=default") == 0) changecode = 1;
+			else if(strcmp(argv[i],"-c=name") == 0) changecode = 2;
+			
+			getheader_c_mode("./.mycheck/working.txt",changecode,argv[i+1],argv[i+2]);
+			getheader_c_mode("./.mycheck/storage.txt",changecode,argv[i+1],argv[i+2]);
 			i+=2;
 			return;
 		}
@@ -154,19 +259,24 @@ void getheader_argument(int argc,char *argv[])
 				printf("Error: In function 'getheader': Wrong format of argument '-d'\n");
 				exit(0);
 			}
-//			arg1 = argv[i+1];
+			getheader_d_mode("./.mycheck/working.txt",argv[i+1]);
+			getheader_d_mode("./.mycheck/storage.txt",argv[i+1]);
 			++i;
+			return;
 		}
-		else if(strcmp(argv[i],"-r") == 0)
+		else if(strcmp(argv[i],"-rn") == 0)
 		{
 			if(argv[i+1] == NULL || argv[i+2] == NULL)
 			{
 				printf("Error: In function 'getheader': Wrong format of argument '-r'\n");
 				exit(0);
 			}
+			getheader_rn_mode("./.mycheck/working.txt",argv[i+1],argv[i+2]);
+			getheader_rn_mode("./.mycheck/storage.txt",argv[i+1],argv[i+2]);
 //			arg1 = argv[i+1];
 //			arg2 = argv[i+2];
 			i+=2;
+			return;
 		}
 		else
 		{
