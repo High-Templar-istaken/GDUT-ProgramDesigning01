@@ -101,31 +101,14 @@ void getheader_n_mode(char *filename, char* id, char* displayname)
 		exit(0);
 	}
 	
-	if(headerbegin == NULL)
-	{
-		headerbegin = (PHEADER) malloc(sizeof(struct header));
-		(*headerbegin).nxtheader = (*headerbegin).lasheader = NULL;
-		(*headerbegin).id = id;
-		(*headerbegin).name = displayname;
-		fclose(stream);
-		fclose(stream);
-		stream = fopen(filename,"w");
-		WriteTable(stream);
-		fclose(stream);
-		stream = NULL;
-		return;
-	}
+	PHEADER nowheader = (PHEADER) malloc (sizeof(struct header));
 	
-	PHEADER nowheader = headerbegin;
-	while((*nowheader).nxtheader != NULL) nowheader = (*nowheader).nxtheader;
-	
-	(*nowheader).nxtheader = (PHEADER) malloc(sizeof(struct header));
-	(*((*nowheader).nxtheader)).lasheader = nowheader;
-	nowheader = (*nowheader).nxtheader;
-	(*nowheader).nxtheader = NULL;
+	(*nowheader).nxtheader = (*nowheader).lasheader = NULL;
 	(*nowheader).id = id;
 	(*nowheader).name = displayname;
 	(*nowheader).def = "#";
+	
+	InsertHeader_PushBackOf(headerend, nowheader);
 	
 	DebugPrintTable();
 	fclose(stream);

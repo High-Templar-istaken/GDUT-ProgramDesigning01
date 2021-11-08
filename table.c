@@ -32,6 +32,7 @@ void WriteTable(FILE *stream)
 		nowheader = (*nowheader).nxtheader;
 	}
 	fprintf(stream,"\n");
+	nowheader = headerbegin;
 	while(nowheader != NULL)
 	{
 		fprintf(stream,"%s:%s ",(*nowheader).id, (*nowheader).def);

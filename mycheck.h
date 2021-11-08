@@ -2,6 +2,10 @@
 #define _MYCHECK_ALLHEADFILES
 /*global var*/
 #include <stdbool.h>
+#define PKEY struct key*
+#define PROW struct row*
+#define PHEADER struct header*
+
 
 struct key
 {
@@ -18,7 +22,8 @@ struct row
 	struct row *lasrow;// should be named 'pre...' but I can't rename it :(
 	int code;
 };
-extern struct row* rowbegin;
+extern PROW rowbegin;
+extern PROW rowend;
 
 struct header
 {
@@ -27,14 +32,14 @@ struct header
 	struct header *lasheader;// should be named 'pre...' but I can't rename it :(
 	int code;
 };
-extern struct header* headerbegin;
+extern PHEADER headerbegin;
+extern PHEADER headerend;
+
 extern const int MAX_INPUT_CACHE;
 extern bool showcode;
 extern int maxrow,maxheader; 
 
-#define PKEY struct key*
-#define PROW struct row*
-#define PHEADER struct header*
+
 
 #include <stdio.h>
 #include <stdlib.h>

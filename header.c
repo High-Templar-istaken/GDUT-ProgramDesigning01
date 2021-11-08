@@ -88,6 +88,7 @@ void DeleteHeader(PHEADER del, bool truedelete)
 		pre = (*del).lasheader;
 		
 		(*pre).nxtheader = NULL;
+		headerend = pre;
 	}
 	else
 	{
@@ -191,6 +192,40 @@ void DEBUGShowAllHeader()
 	}
 }
 
+void ReadAllHeader_DevideNextHeaderInput(char *line, int *j, char **first, char **second, char *tmp)//**tmp: avoid too many malloc requests
+{
+	// read first chapter
+	int i = 0;
+	while(line[(*j)] != ':')
+	{
+		tmp[i++]=line[(*j)++];
+		if(line[(*j)]==' '||line[(*j)]=='\n')
+		{
+			printf("Error: In function 'ReadAllHeader' Wrong format in the header of Working list!\n");
+			exit(0);
+		}
+	}
+	tmp[i]='\0';
+	if(strlen(tmp) == 0)
+	{
+		printf("Error: In function 'ReadAllHeader' Empty Header ID!\n");
+		exit(0);
+	}
+	(*first) = (char*) malloc(sizeof(char)*(strlen(tmp)+1));
+	strcpy((*first), tmp);
+	while(line[(*j)] == ':') ++(*j); //skip the devide char ' '&':'
+	
+	//read second chapter
+	i = 0;
+	while(line[(*j)] != ' ' && line[(*j)] != '\n')
+	{
+		tmp[i++]=line[(*j)++];
+	}
+	tmp[i]='\0';
+	(*second) = (char*) malloc(sizeof(char)*(strlen(tmp)+1));
+	strcpy((*second), tmp);
+}
+
 void ReadAllHeader_HeaderPart(FILE *stream)
 {
 	char *line = NULL;
@@ -198,6 +233,7 @@ void ReadAllHeader_HeaderPart(FILE *stream)
 	_templar_GetTightString_Getline(&line, stream);//firstline end with '\n'
 	
 	headerbegin = NULL;
+	headerend = NULL;
 	
 	if(strcmp(line,"\n") == 0 || strcmp(line," \n") == 0)
 	{
@@ -211,7 +247,7 @@ void ReadAllHeader_HeaderPart(FILE *stream)
 	PHEADER now = NULL;
 	char *tmp = (char*) malloc (sizeof(char)*MAX_INPUT_CACHE);
 	
-	int j = 0, i = 0;
+	int j = 0;
 	while(line[j] == ' ') ++j;
 	
 	
@@ -222,37 +258,10 @@ void ReadAllHeader_HeaderPart(FILE *stream)
 		(*now).lasheader = NULL;
 		(*now).def = "#";
 		
-		// read first line
-		i = 0;
-		while(line[j]!=':')
-		{
-			tmp[i++]=line[j++];
-			if(line[j]==' '||line[j]=='\n')
-			{
-				printf("Error: In function 'ReadAllHeader' Wrong format in the header of Working list!\n");
-				exit(0);
-			}
-		}
-		tmp[i]='\0';
-		if(strlen(tmp) == 0)
-		{
-			printf("Error: In function 'ReadAllHeader' Empty Header ID!\n");
-			exit(0);
-		}
-		(*now).id = (char*) malloc(sizeof(char)*(strlen(tmp)+1));
-		strcpy((*now).id, tmp);
-		while(line[j] == ':') ++j; //skip the devide char ' '&':'
+		ReadAllHeader_DevideNextHeaderInput(line, &j, &((*now).id), &((*now).name), tmp);
 		
-		//read second chapter
-		i = 0;
-		while(line[j] != ' ' && line[j] != '\n')
-		{
-			tmp[i++]=line[j++];
-		}
-		tmp[i]='\0';
-		(*now).name = (char*) malloc(sizeof(char)*(strlen(tmp)+1));
-		strcpy((*now).name, tmp);
 		las = InsertHeader_PushBackOf(las, now);
+		headerend = now;
 		while(line[j] == ' ' || line[j] == ':') ++j; //skip the devide char ' '&':'
 	}
 	// ReadAllHeader -> Read default
@@ -269,7 +278,7 @@ void ReadAllHeader_DefaultPart(FILE *stream)
 	
 	if(DEBUG) printf("debug: In function '_templar_GetTightString_Getline': source=%s",line);
 	
-	char *tmpid = NULL;
+	char *tmpid = NULL, *tmpdef = NULL;
 	char *tmp = (char*) malloc (sizeof(char)*MAX_INPUT_CACHE);
 	
 	int j = 0, i = 0;
@@ -278,26 +287,8 @@ void ReadAllHeader_DefaultPart(FILE *stream)
 	while(line[j] != '\n')
 	{
 		// read second line
-		i = 0;
-		while(line[j]!=':')
-		{
-			tmp[i++]=line[j++];
-			if(line[j]==' '||line[j]=='\n')
-			{
-				printf("Error: In function 'ReadAllHeader_DefaultPart' Wrong format in the header of Working list!\n");
-				exit(0);
-			}
-		}
-		tmp[i]='\0';
-		if(strlen(tmp) == 0)
-		{
-			printf("Error: In function 'ReadAllHeader_DefaultPart' Empty Header ID!\n");
-			exit(0);
-		}
-		tmpid = (char*) malloc(sizeof(char)*(strlen(tmp)+1));
-		strcpy(tmpid, tmp);
+		ReadAllHeader_DevideNextHeaderInput(line, &j, &tmpid, &tmpdef, tmp);
 		
-		while(line[j] == ':') ++j; //skip the devide char ' '&':'
 		nowheader = QueryHeaderID(tmpid);
 		if(nowheader == NULL)
 		{
@@ -305,16 +296,7 @@ void ReadAllHeader_DefaultPart(FILE *stream)
 			exit(0);
 		}
 		
-		//read second chapter
-		i = 0;
-		while(line[j] != ' ' && line[j] != '\n')
-		{
-			tmp[i++]=line[j++];
-		}
-		tmp[i]='\0';
-		(*nowheader).def = (char*) malloc(sizeof(char)*(strlen(tmp)+1));;
-		
-		strcpy((*nowheader).def, tmp);
+		(*nowheader).def = tmpdef;
 		while(line[j] == ' ' || line[j] == ':') ++j; //skip the devide char ' '& ':'
 	}
 	// ReadAllHeader -> Read default

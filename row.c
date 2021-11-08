@@ -14,7 +14,7 @@ void ReleaseShowAllRow()
 	while(nowrow != NULL)
 	{
 		nowheader = headerbegin;
-		
+		if(showcode) printf("(%d):",(*nowrow).code);
 		while(nowheader != NULL)
 		{
 			nowkey = QueryKey(nowrow,(*nowheader).id);
@@ -25,7 +25,6 @@ void ReleaseShowAllRow()
 			putchar('\t');
 			nowheader = (*nowheader).nxtheader;
 		}
-		if(showcode) printf("\t :(%d)",(*nowrow).code);
 		putchar('\n');
 		nowrow = (*nowrow).nxtrow;
 	}
@@ -49,6 +48,7 @@ void DEBUGShowAllRow()
 		while(nowrow != NULL)
 		{
 			printf("In a new row:");
+			if(showcode) printf("code(%d):",(*nowrow).code);
 			PKEY nowkey = (*nowrow).keybegin;
 			while(nowkey != NULL)
 			{
@@ -56,7 +56,6 @@ void DEBUGShowAllRow()
 				nowkey = (*nowkey).nxtkey;
 			}
 			putchar('\n');
-			if(showcode) printf("\t :(%d)",(*nowrow).code);
 			nowrow = (*nowrow).nxtrow;
 		}
 		
@@ -71,7 +70,10 @@ void ReadAllRow(FILE *stream)
 	char *line = NULL;
  	PROW nowrow = NULL;
  	PKEY nowkey = NULL;
+ 	
  	rowbegin = NULL;
+ 	rowend = NULL;
+ 	
 	do
 	{
 		//get input
@@ -110,6 +112,8 @@ void ReadAllRow(FILE *stream)
 			(*nowrow).keybegin = NULL;
 		}
 		(*nowrow).keybegin = RowDevide(line);
+		
+		rowend = nowrow;
 	}while(true);
 	return;
 }

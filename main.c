@@ -5,9 +5,11 @@ const bool DEBUG = true;
 const int MAX_INPUT_CACHE=10001;
 
 PROW rowbegin;
+PROW rowend;
 PHEADER headerbegin;
+PHEADER headerend;
 bool showcode = false;
-int maxrow,maxheader;
+int maxrow, maxheader;
 
 int main(int argc, char *argv[])
 {
