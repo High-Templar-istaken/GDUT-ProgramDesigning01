@@ -22,7 +22,7 @@ extern struct row* rowbegin;
 
 struct header
 {
-	char *id, *name;
+	char *id, *name, *def;
 	struct header *nxtheader;
 	struct header *lasheader;// should be named 'pre...' but I can't rename it :(
 	int code;

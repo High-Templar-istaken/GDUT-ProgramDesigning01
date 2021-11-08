@@ -92,7 +92,9 @@ void getheader_n_mode(char *filename, char* id, char* displayname)
 	if(DEBUG) printf("debug: stream=%s -> getheader_n_mode -> id=%s displayname=%s\n",filename,id,displayname);
 	
 	FILE *stream = fopen(filename,"r");
+	printf("read..\n");
 	ReadTable(stream);
+	printf("red..\n");
 	if(QueryHeaderID(id) != NULL)
 	{
 		printf("Error: In function 'getheader_n_mode': new header's ID '%s' already existed!\n",id);
@@ -123,6 +125,7 @@ void getheader_n_mode(char *filename, char* id, char* displayname)
 	(*nowheader).nxtheader = NULL;
 	(*nowheader).id = id;
 	(*nowheader).name = displayname;
+	(*nowheader).def = "#";
 	
 	DebugPrintTable();
 	fclose(stream);

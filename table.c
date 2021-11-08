@@ -4,7 +4,9 @@ void ReadTable(FILE* stream)
 {
 	ReadAllHeader(stream);
 	ReadAllRow(stream);
+	if(DEBUG) printf("debug: read table end\n");
 	EncodeTable();
+	
 	return;
 }
 
@@ -27,6 +29,12 @@ void WriteTable(FILE *stream)
 	while(nowheader != NULL)
 	{
 		fprintf(stream,"%s:%s ",(*nowheader).id, (*nowheader).name);
+		nowheader = (*nowheader).nxtheader;
+	}
+	fprintf(stream,"\n");
+	while(nowheader != NULL)
+	{
+		fprintf(stream,"%s:%s ",(*nowheader).id, (*nowheader).def);
 		nowheader = (*nowheader).nxtheader;
 	}
 	fprintf(stream,"\n");

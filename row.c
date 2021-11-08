@@ -19,7 +19,7 @@ void ReleaseShowAllRow()
 		{
 			nowkey = QueryKey(nowrow,(*nowheader).id);
 			
-			if(nowkey == NULL) printf("#"); //There is no such key in this table
+			if(nowkey == NULL) printf("%s",(*nowheader).def); //There is no such key in this table
 			else printf("%s",(*nowkey).value);
 			
 			putchar('\t');
@@ -76,10 +76,19 @@ void ReadAllRow(FILE *stream)
 	{
 		//get input
 		_templar_GetTightString_Getline(&line, stream);
-		if(strcmp(line,"\n") == 0 || strcmp(line," \n") == 0)
+		if(DEBUG) printf("debug: In function 'ReadAllRow': Row that read:%s\n", line,strlen(line));
+		for(int i=0;i<strlen(line);++i)
 		{
-			if(rowbegin == NULL && DEBUG)  printf("debug: In function 'ReadAllRow': no row!\n");
-			return;
+			if(line[i] != ' ' && line[i] != '\n')
+			{
+				break;
+			}
+			
+			if(i == strlen(line) - 1)
+			{
+				if(rowbegin == NULL && DEBUG)  printf("debug: In function 'ReadAllRow': no row!\n");
+				return;
+			}
 		}
 		
 		//create a new row
