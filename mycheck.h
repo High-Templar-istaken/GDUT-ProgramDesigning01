@@ -20,7 +20,7 @@ struct row
 	struct key *keybegin;
 	struct row *nxtrow;
 	struct row *lasrow;// should be named 'pre...' but I can't rename it :(
-	int code;
+	int truekey;
 };
 extern PROW rowbegin;
 extern PROW rowend;
@@ -37,7 +37,7 @@ extern PHEADER headerend;
 
 extern const int MAX_INPUT_CACHE;
 extern bool showcode;
-extern int maxrow,maxheader; 
+extern int maxtruekey;
 
 
 

@@ -1,8 +1,74 @@
 #include "mycheck.h"
 
+PROW InsertRow_PushFrontOf(PROW place, PROW tobenew) //place in the front of 'place'
+{
+	if(place == NULL)
+	{
+		(*tobenew).nxtrow = NULL;
+		(*tobenew).lasrow = NULL;
+		rowbegin = tobenew;
+		rowend = tobenew;
+		return tobenew;
+	}
+	
+	if((*place).lasrow == NULL) //front of the list
+	{
+		//don't need to care about the front node
+		(*tobenew).nxtrow = place; // don't need to take over the front node
+		(*place).lasrow = tobenew;
+		
+		rowbegin = tobenew;
+	}
+	else
+	{
+		//care about the front node
+		(*(*place).lasrow).nxtrow = tobenew;
+		
+		(*tobenew).lasrow = (*place).lasrow;
+		(*tobenew).nxtrow = place;
+		
+		(*place).lasrow = tobenew;
+	}
+	return tobenew;
+}
+
+PROW InsertRow_PushBackOf(PROW place, PROW tobenew) //place in the back of 'place'
+{
+	//create now
+	if(place == NULL)
+	{
+		(*tobenew).nxtrow = NULL;
+		(*tobenew).lasrow = NULL;
+		rowbegin = tobenew;
+		rowend = tobenew;
+		return tobenew;
+	}
+	
+	if((*place).nxtrow == NULL) //back of the list
+	{
+		//don't need to care about the back node
+		(*tobenew).lasrow = place; // don't need to take over the back node
+		(*place).nxtrow = tobenew;
+		
+		rowend = tobenew;
+	}
+	else
+	{
+		//care about the back node
+		(*(*place).nxtrow).lasrow = tobenew;
+		
+		(*tobenew).nxtrow = (*place).nxtrow;
+		(*tobenew).lasrow = place;
+		
+		(*place).nxtrow = tobenew;
+	}
+	return tobenew;
+}
+
+
 PKEY QueryKeyHeader(PROW inrow, char *target)
 {
-	if(DEBUG) printf("debug: In function 'QueryKeyHeader': rowcode=%d WHILE target=%s\n",(*inrow).code,target);
+	if(DEBUG) printf("debug: In function 'QueryKeyHeader': truekey=%d WHILE target=%s\n",(*inrow).truekey,target);
 	PKEY nowkey = (*inrow).keybegin;
 	while(nowkey != NULL)
 	{
@@ -26,7 +92,7 @@ void ReleaseShowAllRow()
 	while(nowrow != NULL)
 	{
 		nowheader = headerbegin;
-		if(showcode) printf("(%d):",(*nowrow).code);
+		if(showcode) printf("(%d):",(*nowrow).truekey);
 		while(nowheader != NULL)
 		{
 			nowkey = QueryKey(nowrow,(*nowheader).id);
@@ -60,7 +126,7 @@ void DEBUGShowAllRow()
 		while(nowrow != NULL)
 		{
 			printf("In a new row:");
-			if(showcode) printf("code(%d):",(*nowrow).code);
+			if(showcode) printf("code(%d):",(*nowrow).truekey);
 			PKEY nowkey = (*nowrow).keybegin;
 			while(nowkey != NULL)
 			{
@@ -76,9 +142,29 @@ void DEBUGShowAllRow()
 	return;
 }
 
+PROW QueryRowTrueKey(int truekey)
+{
+	if(DEBUG) printf("debug: In function 'QueryRowTrueKey': targetcode = '%d'\n",truekey);
+	if(rowbegin == NULL)
+	{
+		if(DEBUG) printf("debug: In function 'QueryRowTrueKey': No Header already existed!\n");
+		return NULL;
+	}
+	
+	PROW nowrow = rowbegin;
+	
+	while(nowrow != NULL)
+	{
+		if((*nowrow).truekey == truekey) break;
+		nowrow = (*nowrow).nxtrow;
+	}
+	return nowrow;
+}
+
 void ReadAllRow(FILE *stream)
 {
 	// fill the in-program row
+	int tmptruekey;
 	char *line = NULL;
  	PROW nowrow = NULL;
  	PKEY nowkey = NULL;
@@ -89,9 +175,9 @@ void ReadAllRow(FILE *stream)
 	do
 	{
 		//get input
+		fscanf(stream,"%d ",&tmptruekey);
 		_templar_GetTightString_Getline(&line, stream);
-		
-		if(DEBUG) printf("debug: In function 'ReadAllRow': Row that read:%s\n", line,strlen(line));
+		if(strcmp(line, "rowend\n") == 0) return;
 		for(int i=0;i<strlen(line);++i)
 		{
 			if(line[i] != ' ' && line[i] != '\n')
@@ -106,25 +192,16 @@ void ReadAllRow(FILE *stream)
 			}
 		}
 		
+		nowrow = (PROW) malloc(sizeof(struct row));
+		(*nowrow).truekey = tmptruekey;
+		(*nowrow).nxtrow = NULL;
+		(*nowrow).lasrow = NULL;
+		(*nowrow).keybegin = NULL;
+		
+		
 		//create a new row
-		if(rowbegin == NULL)
-		{
-			nowrow = (PROW) malloc(sizeof(struct row));
-			(*nowrow).nxtrow = NULL;
-			(*nowrow).lasrow = NULL;
-			(*nowrow).keybegin = NULL;
-			rowbegin = nowrow;
-		}
-		else
-		{
-			(*nowrow).nxtrow = (PROW) malloc(sizeof(struct row));
-			(*(*nowrow).nxtrow).lasrow = nowrow;
-			nowrow = (*nowrow).nxtrow;
-			
-			(*nowrow).nxtrow = NULL;
-			(*nowrow).keybegin = NULL;
-		}
 		(*nowrow).keybegin = RowDevide(line);
+		InsertRow_PushBackOf(rowend,nowrow);
 		
 		rowend = nowrow;
 	}while(true);

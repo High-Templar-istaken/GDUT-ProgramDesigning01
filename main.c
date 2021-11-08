@@ -1,7 +1,7 @@
 #include "mycheck.h"
 /* run this program using the console pauser or add your own getch, system("pause") or input loop */
 
-const bool DEBUG = false;
+const bool DEBUG = true;
 const int MAX_INPUT_CACHE=10001;
 
 PROW rowbegin;
@@ -9,7 +9,7 @@ PROW rowend;
 PHEADER headerbegin;
 PHEADER headerend;
 bool showcode = false;
-int maxrow, maxheader;
+int maxtruekey;
 
 int main(int argc, char *argv[])
 {
@@ -29,7 +29,6 @@ int main(int argc, char *argv[])
 		default:printf("Error: Unexpected return value from function 'analyze'\n");
 			break;
 	}
-	
 	/*
 	system("pause");
 	system("chcp 936");   //set charset back to GBK

@@ -26,6 +26,7 @@ void DebugPrintTable()
 void WriteTable(FILE *stream)
 {
 	PHEADER nowheader = headerbegin;
+	fprintf(stream,"%d\n",maxtruekey);
 	while(nowheader != NULL)
 	{
 		fprintf(stream,"%s:%s ",(*nowheader).id, (*nowheader).name);
@@ -45,6 +46,7 @@ void WriteTable(FILE *stream)
 	while(nowrow != NULL)
 	{
 		nowkey = (*nowrow).keybegin;
+		fprintf(stream,"%d ",(*nowrow).truekey);
 		while(nowkey != NULL)
 		{
 			fprintf(stream,"%s:%s ",(*nowkey).header,(*nowkey).value);
@@ -53,7 +55,7 @@ void WriteTable(FILE *stream)
 		fprintf(stream,"\n");
 		nowrow = (*nowrow).nxtrow;
 	}
-	fprintf(stream,"\n");
-	fprintf(stream,"\n");
+	fprintf(stream,"rowend\n");
+	fprintf(stream,"\n\n\n");
 	fclose(stream);
 }

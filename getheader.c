@@ -5,7 +5,7 @@ void moveheader(PHEADER moving,int targetcode,bool direct)// 0:forward ; 1:backw
 /*1 means the replaced node will be poped front*/
 {
 	//spj
-	if(maxheader == 1) return;
+	if(headerbegin == headerend) return;
 	
 	PHEADER now = NULL;
 	/*delete*/
@@ -111,17 +111,17 @@ void getheader_m_mode(char *filename, char* id,char *offset)
 			if(DEBUG) printf("debug: '%s' %d step(s) forward WHILE target site=%d\n",id,step,target);
 			
 			if(target <= 0) target = 1;
-			if(target > maxheader) target = maxheader;
+			if(target > (*headerend).code) target = (*headerend).code;
 			moveheader(nowheader, target, 0);
 		}
 		else //backward
 		{
-			if((*nowheader).code == maxheader) return;
+			if((*nowheader).code == (*headerend).code) return;
 			target = (*nowheader).code + step;
 			if(DEBUG) printf("debug: '%s' %d step(s) forward WHILE target site=%d\n",id,step,target);
 			
 			if(target <= 0) target = 1;
-			if(target > maxheader) target = maxheader;
+			if(target > (*headerend).code) target = (*headerend).code;
 			moveheader(nowheader, target, 1);
 		}
 	}
@@ -192,10 +192,10 @@ void getheader_rn_mode(char *filename, char* id, char *newid)
 		nowkey = QueryKeyHeader(nowrow,id);
 		if(nowkey == NULL)
 		{
-			if(DEBUG) printf("debug: In row(%d): No such key!\n",(*nowrow).code);
+			if(DEBUG) printf("debug: In row(%d): No such key!\n",(*nowrow).truekey);
 			continue;
 		}
-		if(DEBUG) printf("In row(%d): KEY FOUNDED, value=%s\n",(*nowrow).code,(*nowkey).value);
+		if(DEBUG) printf("In row(%d): KEY FOUNDED, value=%s\n",(*nowrow).truekey,(*nowkey).value);
 		
 		free((*nowkey).header);
 		(*nowkey).header = newid;
@@ -273,8 +273,6 @@ void getheader_argument(int argc,char *argv[])
 			}
 			getheader_rn_mode("./.mycheck/working.txt",argv[i+1],argv[i+2]);
 			getheader_rn_mode("./.mycheck/storage.txt",argv[i+1],argv[i+2]);
-//			arg1 = argv[i+1];
-//			arg2 = argv[i+2];
 			i+=2;
 			return;
 		}

@@ -1,12 +1,13 @@
 #include "mycheck.h"
 
-struct header* InsertHeader_PushFrontOf(PHEADER place, PHEADER tobenew) //place in the front of 'place'
+PHEADER InsertHeader_PushFrontOf(PHEADER place, PHEADER tobenew) //place in the front of 'place'
 {
 	if(place == NULL)
 	{
 		(*tobenew).nxtheader = NULL;
 		(*tobenew).lasheader = NULL;
 		headerbegin = tobenew;
+		headerend = tobenew;
 		return tobenew;
 	}
 	
@@ -31,7 +32,7 @@ struct header* InsertHeader_PushFrontOf(PHEADER place, PHEADER tobenew) //place 
 	return tobenew;
 }
 
-struct header* InsertHeader_PushBackOf(PHEADER place, PHEADER tobenew) //place in the back of 'place'
+PHEADER InsertHeader_PushBackOf(PHEADER place, PHEADER tobenew) //place in the back of 'place'
 {
 	//create now
 	if(place == NULL)
@@ -39,6 +40,7 @@ struct header* InsertHeader_PushBackOf(PHEADER place, PHEADER tobenew) //place i
 		(*tobenew).nxtheader = NULL;
 		(*tobenew).lasheader = NULL;
 		headerbegin = tobenew;
+		headerend = tobenew;
 		return tobenew;
 	}
 	
@@ -47,6 +49,8 @@ struct header* InsertHeader_PushBackOf(PHEADER place, PHEADER tobenew) //place i
 		//don't need to care about the back node
 		(*tobenew).lasheader = place; // don't need to take over the back node
 		(*place).nxtheader = tobenew;
+		
+		headerend = tobenew;
 	}
 	else
 	{
@@ -64,10 +68,10 @@ struct header* InsertHeader_PushBackOf(PHEADER place, PHEADER tobenew) //place i
 void DeleteHeader(PHEADER del, bool truedelete)
 {
 	//spj
-	if(maxheader == 1)
+	if((*headerbegin).nxtheader == NULL)
 	{
 		headerbegin = NULL;
-		maxheader = 0;
+		headerend = NULL;
 		free(del);
 		return;
 	}
@@ -83,7 +87,7 @@ void DeleteHeader(PHEADER del, bool truedelete)
 		(*nxt).lasheader = NULL;
 		headerbegin = nxt;
 	}
-	else if((*del).code == maxheader) //headerend
+	else if((*del).nxtheader == NULL) //headerend
 	{
 		pre = (*del).lasheader;
 		
@@ -107,7 +111,7 @@ void DeleteHeader(PHEADER del, bool truedelete)
 	return;
 }
 
-struct header* QueryHeaderID(char *targetheader)
+PHEADER QueryHeaderID(char *targetheader)
 {
 	if(DEBUG) printf("debug: In function 'QueryHeaderID': targetheader = '%s'\n",targetheader);
 	if(headerbegin == NULL)
@@ -126,7 +130,7 @@ struct header* QueryHeaderID(char *targetheader)
 	return nowheader;
 }
 
-struct header* QueryHeaderCode(int code)
+PHEADER QueryHeaderCode(int code)
 {
 	if(DEBUG) printf("debug: In function 'QueryHeaderCode': targetcode = '%d'\n",code);
 	if(headerbegin == NULL)
@@ -260,8 +264,7 @@ void ReadAllHeader_HeaderPart(FILE *stream)
 		
 		ReadAllHeader_DevideNextHeaderInput(line, &j, &((*now).id), &((*now).name), tmp);
 		
-		las = InsertHeader_PushBackOf(las, now);
-		headerend = now;
+		InsertHeader_PushBackOf(headerend, now);
 		while(line[j] == ' ' || line[j] == ':') ++j; //skip the devide char ' '&':'
 	}
 	// ReadAllHeader -> Read default
@@ -304,8 +307,15 @@ void ReadAllHeader_DefaultPart(FILE *stream)
 	free(tmp);
 }
 
+void ReadAllHeader_TrueKeyPart(FILE *stream)
+{
+	fscanf(stream,"%d\n",&maxtruekey);
+	return;
+}
+
 void ReadAllHeader(FILE *stream)
 {
+	ReadAllHeader_TrueKeyPart(stream);
 	ReadAllHeader_HeaderPart(stream);
 	ReadAllHeader_DefaultPart(stream);
 	return;
