@@ -27,9 +27,12 @@ int _templar_StringToInt(char *str)
 	int pn = 1;// positive or negative
 	if(!isdigit(str[0]))
 	{
-		if(str[0] == '-')
+		if(str[0] == '-') pn = -1;
+		else if(str[0] == '+') pn = 1;
+		else
 		{
-			pn = -1;
+			printf("Error: In function '_templar_StringToInt': '%s' is not a number\n",str);
+			exit(0);
 		}
 		++i;
 	}

@@ -6,6 +6,7 @@ PHEADER InsertHeader_BackOf(PHEADER place, PHEADER tobenew);
 void ReleaseShowAllHeader();
 void DEBUGShowAllHeader();
 void ReadAllHeader(FILE*);
+void ReadAllHeader_DevideNextHeaderInput(char *line, int *j, char **first, char **second, char *tmp);
 PHEADER QueryHeaderID(char *);
 PHEADER QueryHeaderCode(int);
 void DeleteHeader(PHEADER del, bool truedelete);

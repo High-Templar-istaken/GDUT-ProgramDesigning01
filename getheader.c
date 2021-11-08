@@ -91,39 +91,32 @@ void getheader_m_mode(char *filename, char* id,char *offset)
 			exit(0);
 		} 
 		
+		
 		PHEADER nowheader = QueryHeaderID(id);
 		if(nowheader == NULL)
 		{
 			printf("Error: In function 'getheader_m_mode': HeaderID '%s' unexisted!\n", id);
 			exit(0);
 		}
-		int step = _templar_StringToInt(offset+1), target;
+		int target = _templar_StringToInt(offset+1);
 		
-		if(step == 0)
+		if(target <= 0 || target > (*headerend).code)
 		{
-			return;
+			printf("Error: Unexisted header code '%d'!\n",target);
+			exit(0);
 		}
+		if(target == (*nowheader).code) return;
+		// 0 = Front, 1 = backward
 		
 		if(offset[0] == ',') //forword
 		{
-			if((*nowheader).code == 1) return;
-			target = (*nowheader).code - step;
-			if(DEBUG) printf("debug: '%s' %d step(s) forward WHILE target site=%d\n",id,step,target);
-			
-			if(target <= 0) target = 1;
-			if(target > (*headerend).code) target = (*headerend).code;
 			moveheader(nowheader, target, 0);
 		}
 		else //backward
 		{
-			if((*nowheader).code == (*headerend).code) return;
-			target = (*nowheader).code + step;
-			if(DEBUG) printf("debug: '%s' %d step(s) forward WHILE target site=%d\n",id,step,target);
-			
-			if(target <= 0) target = 1;
-			if(target > (*headerend).code) target = (*headerend).code;
 			moveheader(nowheader, target, 1);
 		}
+		
 	}
 	else
 	{

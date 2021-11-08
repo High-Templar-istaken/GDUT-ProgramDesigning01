@@ -261,42 +261,8 @@ void RowDevide(char *source, PROW inrow)
 		now = (PKEY) malloc(sizeof(struct key));
 		(*now).nxtkey = (*now).laskey = NULL;
 		
-		// read first chapter
-		i = 0;
-		while(source[j]!=':')
-		{
-			tmp[i++]=source[j++];
-			if(source[j]==' '||source[j]=='\n')
-			{
-				printf("Error: In function 'RowDevide' Wrong format in the header of Working list!\n");
-				exit(0);
-			}
-		}
-		tmp[i]='\0';
-		if(strlen(tmp) == 0)
-		{
-			printf("Error: In function 'RowDevide' Empty Header ID!\n");
-			exit(0);
-		}
-		(*now).header = (char*) malloc(sizeof(char)*(strlen(tmp)+1));
-		strcpy((*now).header, tmp);
-		while(source[j] == ':') ++j; //skip the devide char ' '&':'
+		ReadAllHeader_DevideNextHeaderInput(source, &j, &((*now).header), &((*now).value), tmp);
 		
-		//read second chapter
-		i = 0;
-		while(source[j] != ' '&&source[j] != '\n')
-		{
-			tmp[i++]=source[j++];
-		}
-		tmp[i] = '\0';
-		if(strlen(tmp) == 0)
-		{
-			tmp[0] = '#';
-			tmp[1] = '\0';
-		}
-		(*now).value = (char*) malloc(sizeof(char)*(strlen(tmp)+1));
-		strcpy((*now).value, tmp);
-		printf("tobeins: %s:%s\n",(*now).value,(*now).header);
 		InsertKey_BackOf((*inrow).keyend , now, inrow);
 		
 		while(source[j] == ' ' || source[j] == ':') ++j; //skip the devide char ' '&':'
