@@ -1,6 +1,6 @@
 #include "mycheck.h"
 
-PHEADER InsertHeader_PushFrontOf(PHEADER place, PHEADER tobenew) //place in the front of 'place'
+PHEADER InsertHeader_FrontOf(PHEADER place, PHEADER tobenew) //place in the front of 'place'
 {
 	if(place == NULL)
 	{
@@ -32,7 +32,7 @@ PHEADER InsertHeader_PushFrontOf(PHEADER place, PHEADER tobenew) //place in the 
 	return tobenew;
 }
 
-PHEADER InsertHeader_PushBackOf(PHEADER place, PHEADER tobenew) //place in the back of 'place'
+PHEADER InsertHeader_BackOf(PHEADER place, PHEADER tobenew) //place in the back of 'place'
 {
 	//create now
 	if(place == NULL)
@@ -264,7 +264,7 @@ void ReadAllHeader_HeaderPart(FILE *stream)
 		
 		ReadAllHeader_DevideNextHeaderInput(line, &j, &((*now).id), &((*now).name), tmp);
 		
-		InsertHeader_PushBackOf(headerend, now);
+		InsertHeader_BackOf(headerend, now);
 		while(line[j] == ' ' || line[j] == ':') ++j; //skip the devide char ' '&':'
 	}
 	// ReadAllHeader -> Read default

@@ -17,7 +17,7 @@ struct key
 	
 struct row
 {
-	struct key *keybegin;
+	struct key *keybegin, *keyend;
 	struct row *nxtrow;
 	struct row *lasrow;// should be named 'pre...' but I can't rename it :(
 	int truekey;

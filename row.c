@@ -1,6 +1,6 @@
 #include "mycheck.h"
 
-PROW InsertRow_PushFrontOf(PROW place, PROW tobenew) //place in the front of 'place'
+PROW InsertRow_FrontOf(PROW place, PROW tobenew) //place in the front of 'place'
 {
 	if(place == NULL)
 	{
@@ -32,7 +32,7 @@ PROW InsertRow_PushFrontOf(PROW place, PROW tobenew) //place in the front of 'pl
 	return tobenew;
 }
 
-PROW InsertRow_PushBackOf(PROW place, PROW tobenew) //place in the back of 'place'
+PROW InsertRow_BackOf(PROW place, PROW tobenew) //place in the back of 'place'
 {
 	//create now
 	if(place == NULL)
@@ -196,54 +196,70 @@ void ReadAllRow(FILE *stream)
 		(*nowrow).truekey = tmptruekey;
 		(*nowrow).nxtrow = NULL;
 		(*nowrow).lasrow = NULL;
-		(*nowrow).keybegin = NULL;
-		
 		
 		//create a new row
-		(*nowrow).keybegin = RowDevide(line);
-		InsertRow_PushBackOf(rowend,nowrow);
+		RowDevide(line, nowrow);
+		InsertRow_BackOf(rowend,nowrow);
 		
 		rowend = nowrow;
 	}while(true);
 	return;
 }
 
-struct key* RowDevide(char *source)
+PKEY InsertKey_BackOf(PKEY place, PKEY tobe, PROW inrow)
+{
+	if(place == NULL)
+	{
+		(*inrow).keyend = (*inrow).keybegin = tobe;
+		return tobe;
+	}
+	// create a new key
+	if((*place).nxtkey == NULL)
+	{
+		(*place).nxtkey = tobe;
+		(*tobe).laskey = place;
+		
+		(*inrow).keyend = tobe;
+	}
+	else if((*place).laskey == NULL)
+	{
+		(*place).laskey = tobe;
+		(*tobe).nxtkey = place;
+		
+		(*inrow).keybegin = tobe;
+	}
+	else
+	{
+		(*(*place).nxtkey).laskey = tobe;
+		
+		(*tobe).nxtkey = (*place).nxtkey;
+		(*tobe).laskey = place;
+		
+		(*place).nxtkey = tobe;
+	}
+	return tobe;
+}
+
+void RowDevide(char *source, PROW inrow)
 {
 	if(DEBUG) printf("debug: In function 'RowDevide': source=%s\n",source);
 	
+	(*inrow).keyend = (*inrow).keybegin = NULL;
 	if(strcmp(source,"\n") == 0 || strcmp(source," \n") == 0)
 	{
 		if(DEBUG) printf("debug: In function 'RowDevide': No key at all!\n");
-		return NULL;
+		return;
 	}
 	
-	PKEY keybegin = NULL;
 	PKEY now = NULL;
 	char *tmp = (char*) malloc (sizeof(char)*MAX_INPUT_CACHE);
-	bool firstkey = true;
 	
 	int j = 0, i = 0;
 	while(source[j] == ' ') ++j;
 	while(source[j] != '\n')
 	{
-		// create a new key
-		if(firstkey != true)
-		{
-			(*now).nxtkey = (PKEY) malloc(sizeof(struct key));
-			(*(*now).nxtkey).laskey = now;
-			now = (*now).nxtkey;
-			(*now).nxtkey = NULL;
-		}
-		else
-		{
-			now = (PKEY) malloc(sizeof(struct key));
-			(*now).nxtkey = NULL;
-			(*now).laskey = NULL;
-			keybegin = now;
-			
-			firstkey = false;
-		}
+		now = (PKEY) malloc(sizeof(struct key));
+		(*now).nxtkey = (*now).laskey = NULL;
 		
 		// read first chapter
 		i = 0;
@@ -280,9 +296,11 @@ struct key* RowDevide(char *source)
 		}
 		(*now).value = (char*) malloc(sizeof(char)*(strlen(tmp)+1));
 		strcpy((*now).value, tmp);
+		printf("tobeins: %s:%s\n",(*now).value,(*now).header);
+		InsertKey_BackOf((*inrow).keyend , now, inrow);
 		
 		while(source[j] == ' ' || source[j] == ':') ++j; //skip the devide char ' '&':'
 	}
 	free(tmp);
-	return keybegin;
+	return;
 }

@@ -4,10 +4,11 @@
 void ReleaseShowAllRow();
 void DEBUGShowAllRow();
 void ReadAllRow(FILE*);
-PKEY RowDevide(char *);
 PKEY QueryKeyHeader(PROW inrow, char *target);
-PROW InsertRow_PushFrontOf(PROW place, PROW tobenew);
-PROW InsertRow_PushBackOf(PROW place, PROW tobenew);
+PROW InsertRow_FrontOf(PROW place, PROW tobenew);
+PROW InsertRow_BackOf(PROW place, PROW tobenew);
 PROW QueryRowTrueKey(int truekey);
+void RowDevide(char *source, PROW inrow);
+PKEY InsertKey_BackOf(PKEY place, PKEY tobe, PROW inrow);
 
 #endif

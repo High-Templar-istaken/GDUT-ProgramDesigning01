@@ -18,8 +18,8 @@ void moveheader(PHEADER moving,int targetcode,bool direct)// 0:forward ; 1:backw
 		printf("WTF, how can you make that? Destination not found but the mission launched ?\n");
 		exit(0);
 	}
-	if(direct == 0) InsertHeader_PushFrontOf(now, moving);
-	if(direct == 1) InsertHeader_PushBackOf(now, moving);
+	if(direct == 0) InsertHeader_FrontOf(now, moving);
+	if(direct == 1) InsertHeader_BackOf(now, moving);
 }
 
 /*
@@ -157,7 +157,7 @@ void getheader_n_mode(char *filename, char* id, char* displayname,char *def)
 	(*nowheader).name = displayname;
 	(*nowheader).def = def;
 	
-	InsertHeader_PushBackOf(headerend, nowheader);
+	InsertHeader_BackOf(headerend, nowheader);
 	
 	DebugPrintTable();
 	
@@ -221,7 +221,6 @@ void getheader_argument(int argc,char *argv[])
 			//operating both lists
 			getheader_n_mode("./.mycheck/working.txt",argv[i+1],argv[i+2],(argv[i+3] == '\0')?"#":argv[i+3]);
 			getheader_n_mode("./.mycheck/storage.txt",argv[i+1],argv[i+2],(argv[i+3] == '\0')?"#":argv[i+3]);
-			i+=2;
 			return;
 		}
 		else if(strcmp(argv[i],"-c=default") == 0 || strcmp(argv[i],"-c=name") == 0)
@@ -237,7 +236,6 @@ void getheader_argument(int argc,char *argv[])
 			
 			getheader_c_mode("./.mycheck/working.txt",changecode,argv[i+1],argv[i+2]);
 			getheader_c_mode("./.mycheck/storage.txt",changecode,argv[i+1],argv[i+2]);
-			i+=2;
 			return;
 		}
 		else if(strcmp(argv[i],"-m") == 0)
@@ -249,7 +247,6 @@ void getheader_argument(int argc,char *argv[])
 			}
 			getheader_m_mode("./.mycheck/working.txt",argv[i+1],argv[i+2]);
 			getheader_m_mode("./.mycheck/storage.txt",argv[i+1],argv[i+2]);
-			i+=2;
 			return;
 		}
 		else if(strcmp(argv[i],"-d") == 0)
@@ -261,7 +258,6 @@ void getheader_argument(int argc,char *argv[])
 			}
 			getheader_d_mode("./.mycheck/working.txt",argv[i+1]);
 			getheader_d_mode("./.mycheck/storage.txt",argv[i+1]);
-			++i;
 			return;
 		}
 		else if(strcmp(argv[i],"-rn") == 0)
@@ -273,7 +269,6 @@ void getheader_argument(int argc,char *argv[])
 			}
 			getheader_rn_mode("./.mycheck/working.txt",argv[i+1],argv[i+2]);
 			getheader_rn_mode("./.mycheck/storage.txt",argv[i+1],argv[i+2]);
-			i+=2;
 			return;
 		}
 		else
