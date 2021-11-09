@@ -73,12 +73,11 @@ void getheader_m_mode(char *filename, char* id,char *offset)
 		printf("Error: In function 'getheader_m_mode': HeaderID '%s' unexisted!\n", id);
 		exit(0);
 	}
-	int target = _templar_StringToInt(offset+1);
-	PHEADER place = QueryHeaderCode(target);
+	PHEADER place = QueryHeaderID(offset+1);
 	
 	if(place == NULL)
 	{
-		printf("Error: Unexisted header code '%d'!\n",target);
+		printf("Error: Unexisted header '%s'!\n",offset+1);
 		exit(0);
 	}
 	

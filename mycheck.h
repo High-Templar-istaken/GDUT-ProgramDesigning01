@@ -30,14 +30,13 @@ struct header
 	char *id, *name, *def;
 	struct header *nxtheader;
 	struct header *lasheader;// should be named 'pre...' but I can't rename it :(
-	int code;
 };
 extern PHEADER headerbegin;
 extern PHEADER headerend;
 
 extern const int MAX_INPUT_CACHE;
 extern bool showcode;
-extern int maxtruekey;
+extern int maxtruekey,totheader;
 
 
 
@@ -55,7 +54,6 @@ extern int maxtruekey;
 #include "else.h"
 #include "getheader.h"
 #include "getrow.h"
-#include "encode.h"
 
 #include "table.h"
 

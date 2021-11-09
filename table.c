@@ -5,7 +5,6 @@ void ReadTable(FILE* stream)
 	ReadAllHeader(stream);
 	ReadAllRow(stream);
 	if(DEBUG) printf("debug: read table end\n");
-	EncodeTable();
 	
 	return;
 }

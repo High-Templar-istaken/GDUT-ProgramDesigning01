@@ -9,7 +9,7 @@ PROW rowend;
 PHEADER headerbegin;
 PHEADER headerend;
 bool showcode = false;
-int maxtruekey;
+int maxtruekey,totheader;
 
 int main(int argc, char *argv[])
 {

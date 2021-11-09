@@ -12,9 +12,9 @@ void getrow_n_mode(char *filename, int argc, char* argv[])
 	int argcnt=0;
 	for(int i = 3; argv[i] != NULL ; ++i) ++argcnt;
 	
-	if(DEBUG) printf("debug: In function 'getrow_n_mode': cntinput=%d WHILE needinput=%d\n",argcnt,(*headerend).code);
+	if(DEBUG) printf("debug: In function 'getrow_n_mode': cntinput=%d WHILE needinput=%d\n",argcnt,totheader);
 	
-	if(argcnt != (*headerend).code && argcnt != 0)
+	if(argcnt != totheader && argcnt != 0)
 	{
 		printf("ERROR: In function 'getrow_n_mode': input value(s) don't match the header(s) ONE BY ONE\n");
 		exit(0);

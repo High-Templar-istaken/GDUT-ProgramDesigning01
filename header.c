@@ -2,6 +2,7 @@
 
 PHEADER InsertHeader_FrontOf(PHEADER place, PHEADER tobenew) //place in the front of 'place'
 {
+	++totheader;
 	if(place == NULL)
 	{
 		(*tobenew).nxtheader = NULL;
@@ -34,6 +35,7 @@ PHEADER InsertHeader_FrontOf(PHEADER place, PHEADER tobenew) //place in the fron
 
 PHEADER InsertHeader_BackOf(PHEADER place, PHEADER tobenew) //place in the back of 'place'
 {
+	++totheader;
 	//create now
 	if(place == NULL)
 	{
@@ -67,6 +69,7 @@ PHEADER InsertHeader_BackOf(PHEADER place, PHEADER tobenew) //place in the back 
 
 void DeleteHeader(PHEADER del, bool truedelete)
 {
+	--totheader;
 	//spj
 	if((*headerbegin).nxtheader == NULL)
 	{
@@ -130,25 +133,6 @@ PHEADER QueryHeaderID(char *targetheader)
 	return nowheader;
 }
 
-PHEADER QueryHeaderCode(int code)
-{
-	if(DEBUG) printf("debug: In function 'QueryHeaderCode': targetcode = '%d'\n",code);
-	if(headerbegin == NULL)
-	{
-		if(DEBUG) printf("debug: In function 'QueryHeaderCode': No Header already existed!\n");
-		return NULL;
-	}
-	
-	PHEADER nowheader = headerbegin;
-	
-	while(nowheader != NULL)
-	{
-		if((*nowheader).code == code) break;
-		nowheader = (*nowheader).nxtheader;
-	}
-	return nowheader;
-}
-
 void ReleaseShowAllHeader()
 {
 	PROW nowrow = rowbegin;
@@ -163,7 +147,7 @@ void ReleaseShowAllHeader()
 	
 	while(nowheader != NULL)
 	{
-		if(showcode == true) printf("%s(%d)", (*nowheader).id, (*nowheader).code);
+		if(showcode == true) printf("%s", (*nowheader).id);
 		else printf("%s",(*nowheader).name);
 		nowheader = (*nowheader).nxtheader;
 		putchar('\t');
@@ -187,7 +171,6 @@ void DEBUGShowAllHeader()
 		while(currentlist != NULL)
 		{
 			printf("id:%s WHILE name=%s AND default=%s\n", (*currentlist).id , (*currentlist).name, (*currentlist).def);
-			printf("(%d)",(*currentlist).code);
 			currentlist = (*currentlist).nxtheader;
 			putchar('\n');
 		}
@@ -239,6 +222,7 @@ void ReadAllHeader_DevideNextHeaderInput(char *line, int *j, char **first, char 
 void ReadAllHeader_HeaderPart(FILE *stream)
 {
 	char *line = NULL;
+	totheader = 0;
 	// ReadAllHeader -> Read header
 	_templar_GetTightString_Getline(&line, stream);//firstline end with '\n'
 	
