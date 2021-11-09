@@ -6,9 +6,7 @@
 */
 void getheader_d_mode(char *filename, char *id)
 {
-	FILE *stream = fopen(filename,"r");
-	ReadTable(stream);
-	fclose(stream); stream = NULL;
+	ReadTable(filename);
 	
 	PHEADER tobe = QueryHeaderID(id);
 	if(tobe == NULL)
@@ -16,25 +14,33 @@ void getheader_d_mode(char *filename, char *id)
 		printf("Error: In function 'getheader_d_mode': No such ID '%s'!",id);
 		exit(0);
 	}
+	if(CheckHeaderUnmove(tobe))
+	{
+		printf("Error: Deleting header begin with '#' is not allowed!\n");
+		exit(0);
+	}
 	DeleteHeader(tobe,true);
 	
-	stream = fopen(filename,"w");
-	WriteTable(stream);
-	fclose(stream); stream = NULL;
+	WriteTable(filename);
 }
 
 void getheader_c_mode(char *filename, int changecode, char *id, char *newvalue)
 {
-	FILE *stream = fopen(filename,"r");
-	ReadTable(stream);
-	fclose(stream); stream = NULL;
+	ReadTable(filename);
 	
 	PHEADER tobe = QueryHeaderID(id);
+	
 	if(tobe == NULL)
 	{
 		printf("Error: In function 'getheader_c_mode': No such ID '%s'!",id);
 		exit(0);
 	}
+	if(CheckHeaderUnmove(tobe))
+	{
+		printf("Error: Changing header begin with '#' is not allowed!\n");
+		exit(0);
+	}
+	
 	if(changecode == 1) //default
 	{
 		free((*tobe).def);
@@ -42,13 +48,11 @@ void getheader_c_mode(char *filename, int changecode, char *id, char *newvalue)
 	}
 	else if(changecode == 2)
 	{
-		free((*tobe).def);
+		free((*tobe).name);
 		(*tobe).name = newvalue;
 	}
 	
-	stream = fopen(filename,"w");
-	WriteTable(stream);
-	fclose(stream); stream = NULL;
+	WriteTable(filename);
 }
 
 void getheader_m_mode(char *filename, char* id,char *offset)
@@ -63,21 +67,24 @@ void getheader_m_mode(char *filename, char* id,char *offset)
 		printf("Error: In function 'getheader_m_mode': No distance argument in '%s'!\n", offset);
 		exit(0);
 	} 
-	FILE *stream = fopen(filename,"r");
-	ReadTable(stream);
-	fclose(stream); stream = NULL;
+	ReadTable(filename);
 		
 	PHEADER nowheader = QueryHeaderID(id);
+	PHEADER place = QueryHeaderID(offset+1);
 	if(nowheader == NULL)
 	{
 		printf("Error: In function 'getheader_m_mode': HeaderID '%s' unexisted!\n", id);
 		exit(0);
 	}
-	PHEADER place = QueryHeaderID(offset+1);
-	
 	if(place == NULL)
 	{
 		printf("Error: Unexisted header '%s'!\n",offset+1);
+		exit(0);
+	}
+	
+	if(CheckHeaderUnmove(place) || CheckHeaderUnmove(nowheader))
+	{
+		printf("Error: Moving header begin with '#' is not allowed!\n");
 		exit(0);
 	}
 	
@@ -96,18 +103,19 @@ void getheader_m_mode(char *filename, char* id,char *offset)
 		InsertHeader_BackOf(place, nowheader);
 	}
 	
-	stream = fopen(filename,"w");
-	WriteTable(stream);
-	fclose(stream); stream = NULL;
+	WriteTable(filename);
 }
 
 void getheader_n_mode(char *filename, char* id, char* displayname,char *def)
 {
 	if(DEBUG) printf("debug: stream=%s -> getheader_n_mode -> id=%s displayname=%s\n",filename,id,displayname);
+	if(id[0] == '#')
+	{
+		printf("Error: Headerid begin with '#' is not allowed!\n");
+		exit(0);
+	}
 	
-	FILE *stream = fopen(filename,"r");
-	ReadTable(stream);
-	fclose(stream); stream = NULL;
+	ReadTable(filename);
 	
 	if(QueryHeaderID(id) != NULL)
 	{
@@ -126,17 +134,12 @@ void getheader_n_mode(char *filename, char* id, char* displayname,char *def)
 	
 	DebugPrintTable();
 	
-	stream = fopen(filename,"w");
-	WriteTable(stream);
-	fclose(stream);
-	stream = NULL;
+	WriteTable(filename);
 }
 
 void getheader_rn_mode(char *filename, char* id, char *newid)
 {
-	FILE *stream = fopen(filename,"r");
-	ReadTable(stream);
-	fclose(stream); stream = NULL;
+	ReadTable(filename);
 	
 	PHEADER nowheader;
 	PROW nowrow = rowbegin;
@@ -146,6 +149,11 @@ void getheader_rn_mode(char *filename, char* id, char *newid)
 	if(nowheader == NULL)
 	{
 		printf("Error: In function 'getheader_rn_mode': No such header ID '%s'!\n",id);
+		exit(0);
+	}
+	if(CheckHeaderUnmove(nowheader))
+	{
+		printf("Error: Renaming header begin with '#' is not allowed!\n");
 		exit(0);
 	}
 	
@@ -167,9 +175,7 @@ void getheader_rn_mode(char *filename, char* id, char *newid)
 		nowrow = (*nowrow).nxtrow;
 	}
 	
-	stream = fopen(filename,"w");
-	WriteTable(stream);
-	fclose(stream); stream = NULL;
+	WriteTable(filename);
 }
 
 void getheader_argument(int argc,char *argv[])

@@ -82,6 +82,11 @@ void ReleaseShowAllRow()
 		if(showcode) printf("(%d):",(*nowrow).truekey);
 		while(nowheader != NULL)
 		{
+			if(CheckHeaderUnmove(nowheader))
+			{
+				nowheader = (*nowheader).nxtheader;
+				continue;
+			}
 			nowkey = QueryKeyHeader(nowrow,(*nowheader).id);
 			
 			if(nowkey == NULL) printf("%s",(*nowheader).def); //There is no such key in this table
@@ -210,7 +215,6 @@ void ReadAllRow(FILE *stream)
 		//get input
 		fscanf(stream,"%d ",&tmptruekey);
 		_templar_GetTightString_Getline(&line, stream);
-		printf("tempget = %s\n",line);
 		if(strcmp(line, "rowend\n") == 0) return;
 		
 		if(DEBUG) printf("temp:get = %s\n",line);

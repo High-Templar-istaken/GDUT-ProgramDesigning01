@@ -1,7 +1,7 @@
 #include "mycheck.h"
 /* run this program using the console pauser or add your own getch, system("pause") or input loop */
 
-const bool DEBUG = true;
+const bool DEBUG = false;
 const int MAX_INPUT_CACHE=10001;
 
 PROW rowbegin;
@@ -14,7 +14,7 @@ int maxtruekey,totheader;
 int main(int argc, char *argv[])
 {
 //	if(DEBUG) system("cls");
-	system("@chcp 65001"); //set charset to UTF-8
+//	system("chcp 65001"); //set charset to UTF-8
 	
 	switch(analyze(argc,argv))
 	{

@@ -5,16 +5,22 @@ void getrow_n_mode(char *filename, int argc, char* argv[])
 	PROW nowrow = NULL;
 	nowrow = (PROW) malloc(sizeof(struct row));
 	
-	FILE *stream = fopen(filename,"r");
-	ReadTable(stream);
-	fclose(stream); stream = NULL;
+	ReadTable(filename);
 	
 	int argcnt=0;
-	for(int i = 3; argv[i] != NULL ; ++i) ++argcnt;
+	for(int i = 3; argv[i] != NULL ; ++i)
+	{
+		if(_templar_HaveColon(argv[i]) == true)
+		{
+			printf("Error: Colon ':' was not allowed in the key!\n");
+			exit(0);
+		}
+		++argcnt;
+	}
 	
 	if(DEBUG) printf("debug: In function 'getrow_n_mode': cntinput=%d WHILE needinput=%d\n",argcnt,totheader);
 	
-	if(argcnt != totheader && argcnt != 0)
+	if(argcnt != totheader-1 && argcnt != 0)
 	{
 		printf("ERROR: In function 'getrow_n_mode': input value(s) don't match the header(s) ONE BY ONE\n");
 		exit(0);
@@ -30,6 +36,12 @@ void getrow_n_mode(char *filename, int argc, char* argv[])
 	
 	while(argcnt != 0 && nowheader != NULL)
 	{
+		if(CheckHeaderUnmove(nowheader))
+		{
+			nowheader = (*nowheader).nxtheader;
+			continue;
+		}
+		
 		nowkey = (PKEY) malloc(sizeof(struct key));
 		(*nowkey).nxtkey = (*nowkey).laskey = NULL;
 		
@@ -47,17 +59,13 @@ void getrow_n_mode(char *filename, int argc, char* argv[])
 	
 	InsertRow_BackOf(rowend, nowrow);
 //	DebugPrintTable();
-	stream = fopen(filename,"w");
-	WriteTable(stream);
-	fclose(stream); stream = NULL;
+	WriteTable(filename);
 }
 
 void getrow_d_mode(char *filename, char *code)
 {
 	int key = _templar_StringToInt(code);
-	FILE *stream = fopen(filename,"r");
-	ReadTable(stream);
-	fclose(stream); stream = NULL;
+	ReadTable(filename);
 	
 	PROW nowrow = QueryRowTrueKey(key);
 	if(nowrow == NULL)
@@ -68,9 +76,7 @@ void getrow_d_mode(char *filename, char *code)
 	
 	DeleteRow(nowrow, true);
 	
-	stream = fopen(filename,"w");
-	WriteTable(stream);
-	fclose(stream); stream = NULL;
+	WriteTable(filename);
 }
 
 void getrow_m_mode(char *filename, char *tobekey, char *placekey)
@@ -86,9 +92,7 @@ void getrow_m_mode(char *filename, char *tobekey, char *placekey)
 		exit(0);
 	}
 	
-	FILE *stream = fopen(filename,"r");
-	ReadTable(stream);
-	fclose(stream); stream = NULL;
+	ReadTable(filename);
 	
 	
 	
@@ -124,18 +128,19 @@ void getrow_m_mode(char *filename, char *tobekey, char *placekey)
 		InsertRow_BackOf(place,tobe);
 	}
 	
-	stream = fopen(filename,"w");
-	WriteTable(stream);
-	fclose(stream); stream = NULL;
+	WriteTable(filename);
 }
 
 void getrow_r_mode(char *filename, char *key, char *headerid, char *value)
 {
+	if(_templar_HaveColon(value) == true)
+	{
+		printf("Error: Colon ':' was not allowed in the key!\n");
+		exit(0);
+	}
 	int truekey = _templar_StringToInt(key);
 	
-	FILE *stream = fopen(filename,"r");
-	ReadTable(stream);
-	fclose(stream); stream = NULL;
+	ReadTable(filename);
 	
 	PROW nowrow = QueryRowTrueKey(truekey);
 	PHEADER nowheader = QueryHeaderID(headerid);
@@ -165,9 +170,7 @@ void getrow_r_mode(char *filename, char *key, char *headerid, char *value)
 		(*nowkey).value = value;
 	}
 	
-	stream = fopen(filename,"w");
-	WriteTable(stream);
-	fclose(stream); stream = NULL;
+	WriteTable(filename);
 }
 
 void getrow_argument(int argc,char *argv[])

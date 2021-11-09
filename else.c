@@ -45,15 +45,11 @@ int getinit(int argc,char *argv[])
 	system("rd /s /q .mycheck");
 	system("mkdir .mycheck");
 	
-	system("echo.> ./.mycheck/working.txt");
-	system("echo.>> ./.mycheck/working.txt");
-	system("echo.>> ./.mycheck/working.txt");
-	
-	system("echo.> ./.mycheck/storage.txt");
-	system("echo.>> ./.mycheck/storage.txt");
-	system("echo.>> ./.mycheck/storage.txt");
-	system("cls");
-	printf("Initialize complete\n");
+	FILE *storage = fopen("./.mycheck/storage.txt","w");
+	fprintf(storage,"0\n##:## \n##:## \nrowend\n \n \n");
+	FILE *working = fopen("./.mycheck/working.txt","w");
+	fprintf(working,"0\n##:## \n##:## \nrowend\n \n \n");
+	fclose(working);fclose(storage);
 	
 	return 0;
 }

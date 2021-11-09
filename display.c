@@ -18,15 +18,13 @@ int display(int argc, char *argv[])
 		}
 	}
 	
-	// create a filereading stream
-	FILE *WorkReader = fopen("./.mycheck/working.txt", "r");
-	ReadTable(WorkReader);
+	ReadTable("./.mycheck/working.txt");
 	
 	//start to display all stuff
 	DebugPrintTable();
+	printf("------Current Working Table------\n");
 	ReleasePrintTable();
 	
-	fclose(WorkReader);
 	if(DEBUG) printf("debug: Display safely\n");
 	return 0;
 }

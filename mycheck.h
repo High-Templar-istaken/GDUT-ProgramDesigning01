@@ -6,7 +6,6 @@
 #define PROW struct row*
 #define PHEADER struct header*
 
-
 struct key
 {
 	struct key *nxtkey;
@@ -37,8 +36,6 @@ extern PHEADER headerend;
 extern const int MAX_INPUT_CACHE;
 extern bool showcode;
 extern int maxtruekey,totheader;
-
-
 
 #include <stdio.h>
 #include <stdlib.h>

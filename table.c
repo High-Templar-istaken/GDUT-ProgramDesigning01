@@ -1,11 +1,13 @@
 #include "mycheck.h"
 
-void ReadTable(FILE* stream)
+void ReadTable(char *filename)
 {
+	FILE *stream = fopen(filename,"r");
 	ReadAllHeader(stream);
 	ReadAllRow(stream);
 	if(DEBUG) printf("debug: read table end\n");
 	
+	fclose(stream); stream = NULL;
 	return;
 }
 
@@ -22,8 +24,10 @@ void DebugPrintTable()
 	return;
 }
 
-void WriteTable(FILE *stream)
+void WriteTable(char *filename)
 {
+	FILE *stream = fopen(filename,"w");
+	
 	PHEADER nowheader = headerbegin;
 	fprintf(stream,"%d\n",maxtruekey);
 	while(nowheader != NULL)
@@ -57,5 +61,6 @@ void WriteTable(FILE *stream)
 	}
 	fprintf(stream,"rowend\n");
 	fprintf(stream,"\n\n\n");
-	fclose(stream);
+	
+	fclose(stream); stream = NULL;
 }

@@ -1,5 +1,11 @@
 #include "mycheck.h"
 
+bool CheckHeaderUnmove(PHEADER now)
+{
+	if((*now).id[0] == '#') return true;
+	return false;
+}
+
 PHEADER InsertHeader_FrontOf(PHEADER place, PHEADER tobenew) //place in the front of 'place'
 {
 	++totheader;
@@ -139,7 +145,7 @@ void ReleaseShowAllHeader()
 	PHEADER nowheader = headerbegin;
 	PKEY nowkey = NULL;
 	
-	if(headerbegin == NULL)
+	if((*headerend).id[0] == '#')
 	{
 		printf("No Header!\n");
 		return;
@@ -147,6 +153,11 @@ void ReleaseShowAllHeader()
 	
 	while(nowheader != NULL)
 	{
+		if((*nowheader).id[0] == '#')
+		{
+			nowheader = (*nowheader).nxtheader;
+			continue;
+		}
 		if(showcode == true) printf("%s", (*nowheader).id);
 		else printf("%s",(*nowheader).name);
 		nowheader = (*nowheader).nxtheader;
@@ -181,7 +192,6 @@ void DEBUGShowAllHeader()
 void ReadAllHeader_DevideNextHeaderInput(char *line, int *j, char **first, char **second, char *tmp)//**tmp: avoid too many malloc requests
 {
 	// read first chapter
-	printf("temp: devided nxtheader = %s\n",line);
 	int i = 0;
 	for(int k=0;k<strlen(line);++k)
 	{
