@@ -1,27 +1,5 @@
 #include "mycheck.h"
 
-void moveheader(PHEADER moving,int targetcode,bool direct)// 0:forward ; 1:backward
-/*0 means the replaced node will be pushed back*/
-/*1 means the replaced node will be poped front*/
-{
-	//spj
-	if(headerbegin == headerend) return;
-	
-	PHEADER now = NULL;
-	/*delete*/
-	DeleteHeader(moving, false);
-	
-	
-	now = QueryHeaderCode(targetcode);
-	if(now == NULL)
-	{
-		printf("WTF, how can you make that? Destination not found but the mission launched ?\n");
-		exit(0);
-	}
-	if(direct == 0) InsertHeader_FrontOf(now, moving);
-	if(direct == 1) InsertHeader_BackOf(now, moving);
-}
-
 /*
 1: default
 2: name
@@ -75,58 +53,53 @@ void getheader_c_mode(char *filename, int changecode, char *id, char *newvalue)
 
 void getheader_m_mode(char *filename, char* id,char *offset)
 {
+	if(offset[0] != ',' && offset[0] != '.')
+	{
+		printf("No direction mark like ',' or '.' in argument '%s\n'",offset);
+		exit(0);
+	}
+	if(offset[1] == '\0')
+	{
+		printf("Error: In function 'getheader_m_mode': No distance argument in '%s'!\n", offset);
+		exit(0);
+	} 
 	FILE *stream = fopen(filename,"r");
 	ReadTable(stream);
 	fclose(stream); stream = NULL;
-	if(!isdigit(offset[0]))
+		
+	PHEADER nowheader = QueryHeaderID(id);
+	if(nowheader == NULL)
 	{
-		if(offset[0] != ',' && offset[0] != '.')
-		{
-			printf("Error: In function 'getheader_m_mode': Direction mark of '%s' is not ',' or '.'\n", offset);
-			exit(0);
-		}
-		if(offset[1] == '\0')
-		{
-			printf("Error: In function 'getheader_m_mode': No distance argument in '%s'!\n", offset);
-			exit(0);
-		} 
-		
-		
-		PHEADER nowheader = QueryHeaderID(id);
-		if(nowheader == NULL)
-		{
-			printf("Error: In function 'getheader_m_mode': HeaderID '%s' unexisted!\n", id);
-			exit(0);
-		}
-		int target = _templar_StringToInt(offset+1);
-		
-		if(target <= 0 || target > (*headerend).code)
-		{
-			printf("Error: Unexisted header code '%d'!\n",target);
-			exit(0);
-		}
-		if(target == (*nowheader).code) return;
-		// 0 = Front, 1 = backward
-		
-		if(offset[0] == ',') //forword
-		{
-			moveheader(nowheader, target, 0);
-		}
-		else //backward
-		{
-			moveheader(nowheader, target, 1);
-		}
-		
-	}
-	else
-	{
-		printf("error: In function 'getheader_m_mode': No direction mark like ',' or '.' in argument '%s\n'",offset);
+		printf("Error: In function 'getheader_m_mode': HeaderID '%s' unexisted!\n", id);
 		exit(0);
 	}
+	int target = _templar_StringToInt(offset+1);
+	PHEADER place = QueryHeaderCode(target);
+	
+	if(place == NULL)
+	{
+		printf("Error: Unexisted header code '%d'!\n",target);
+		exit(0);
+	}
+	
+	/*spj*/
+	if(place == nowheader) return;
+	if(headerbegin == headerend) return;
+	
+	DeleteHeader(nowheader, false);
+	
+	if(offset[0] == ',') //forword
+	{
+		InsertHeader_FrontOf(place, nowheader);
+	}
+	else //backward
+	{
+		InsertHeader_BackOf(place, nowheader);
+	}
+	
 	stream = fopen(filename,"w");
 	WriteTable(stream);
 	fclose(stream); stream = NULL;
-	
 }
 
 void getheader_n_mode(char *filename, char* id, char* displayname,char *def)
