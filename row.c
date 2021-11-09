@@ -65,19 +65,6 @@ PROW InsertRow_BackOf(PROW place, PROW tobenew) //place in the back of 'place'
 	return tobenew;
 }
 
-
-PKEY QueryKeyHeader(PROW inrow, char *target)
-{
-	if(DEBUG) printf("debug: In function 'QueryKeyHeader': truekey=%d WHILE target=%s\n",(*inrow).truekey,target);
-	PKEY nowkey = (*inrow).keybegin;
-	while(nowkey != NULL)
-	{
-		if(strcmp((*nowkey).header, target) == 0) break;
-		nowkey = (*nowkey).nxtkey;
-	}
-	return nowkey;
-}
-
 void ReleaseShowAllRow()
 {
 	PROW nowrow = rowbegin;
@@ -95,7 +82,7 @@ void ReleaseShowAllRow()
 		if(showcode) printf("(%d):",(*nowrow).truekey);
 		while(nowheader != NULL)
 		{
-			nowkey = QueryKey(nowrow,(*nowheader).id);
+			nowkey = QueryKeyHeader(nowrow,(*nowheader).id);
 			
 			if(nowkey == NULL) printf("%s",(*nowheader).def); //There is no such key in this table
 			else printf("%s",(*nowkey).value);
@@ -246,40 +233,6 @@ void ReadAllRow(FILE *stream)
 		rowend = nowrow;
 	}while(true);
 	return;
-}
-
-PKEY InsertKey_BackOf(PKEY place, PKEY tobe, PROW inrow)
-{
-	if(place == NULL)
-	{
-		(*inrow).keyend = (*inrow).keybegin = tobe;
-		return tobe;
-	}
-	// create a new key
-	if((*place).nxtkey == NULL)
-	{
-		(*place).nxtkey = tobe;
-		(*tobe).laskey = place;
-		
-		(*inrow).keyend = tobe;
-	}
-	else if((*place).laskey == NULL)
-	{
-		(*place).laskey = tobe;
-		(*tobe).nxtkey = place;
-		
-		(*inrow).keybegin = tobe;
-	}
-	else
-	{
-		(*(*place).nxtkey).laskey = tobe;
-		
-		(*tobe).nxtkey = (*place).nxtkey;
-		(*tobe).laskey = place;
-		
-		(*place).nxtkey = tobe;
-	}
-	return tobe;
 }
 
 void RowDevide(char *source, PROW inrow)

@@ -1,6 +1,7 @@
 #ifndef _MYCHECK_KEYOPERATION
 #define _MYCHECK_KEYOPERATION
 
-struct key *QueryKey(PROW , char*);
+PKEY QueryKeyHeader(PROW inrow, char *target);
+PKEY InsertKey_BackOf(PKEY place, PKEY tobe, PROW inrow);
 
 #endif

@@ -129,6 +129,47 @@ void getrow_m_mode(char *filename, char *tobekey, char *placekey)
 	fclose(stream); stream = NULL;
 }
 
+void getrow_r_mode(char *filename, char *key, char *headerid, char *value)
+{
+	int truekey = _templar_StringToInt(key);
+	
+	FILE *stream = fopen(filename,"r");
+	ReadTable(stream);
+	fclose(stream); stream = NULL;
+	
+	PROW nowrow = QueryRowTrueKey(truekey);
+	PHEADER nowheader = QueryHeaderID(headerid);
+	
+	if(nowrow == NULL)
+	{
+		printf("Error: No such truekey '%s'!\n",key);
+		exit(0);
+	}
+	if(nowheader == NULL)
+	{
+		printf("Error: No such header '%s'!\n",headerid);
+		exit(0);
+	}
+	
+	PKEY nowkey = QueryKeyHeader(nowrow, headerid);
+	if(nowkey == NULL)
+	{
+		nowkey = (PKEY) malloc(sizeof(struct key));
+		(*nowkey).header = headerid;
+		(*nowkey).value = value;
+		(*nowkey).nxtkey = (*nowkey).laskey = NULL;
+		InsertKey_BackOf((*nowrow).keyend,nowkey,nowrow);
+	}
+	else
+	{
+		(*nowkey).value = value;
+	}
+	
+	stream = fopen(filename,"w");
+	WriteTable(stream);
+	fclose(stream); stream = NULL;
+}
+
 void getrow_argument(int argc,char *argv[])
 {
 	for(int i = 2 ; argv[i] != NULL ; ++i)
@@ -162,23 +203,20 @@ void getrow_argument(int argc,char *argv[])
 			getrow_m_mode("./.mycheck/storage.txt",argv[i+1],argv[i+2]);
 			return;
 		}
-		/*
-		else if(strcmp(argv[i],"-c=default") == 0 || strcmp(argv[i],"-c=name") == 0)
+		
+		else if(strcmp(argv[i],"-r") == 0)
 		{
-			if(argv[i+1] == NULL || argv[i+2] == NULL)
+			if(argv[i+1] == NULL || argv[i+2] == NULL || argv[i+3] == NULL)
 			{
 				printf("Error: In function 'getrow': Wrong format of argument '-c'\n");
 				exit(0);
 			}
-			int changecode = 0;
-			if(strcmp(argv[i],"-c=default") == 0) changecode = 1;
-			else if(strcmp(argv[i],"-c=name") == 0) changecode = 2;
 			
-			getheader_c_mode("./.mycheck/working.txt",changecode,argv[i+1],argv[i+2]);
-			getheader_c_mode("./.mycheck/storage.txt",changecode,argv[i+1],argv[i+2]);
+			getrow_r_mode("./.mycheck/working.txt",argv[i+1],argv[i+2],argv[i+3]);
+			getrow_r_mode("./.mycheck/storage.txt",argv[i+1],argv[i+2],argv[i+3]);
 			return;
 		}
-		*/
+		
 		else
 		{
 			printf("Error: In function 'getrow': Unknown argument '%s'\n", argv[i]);
