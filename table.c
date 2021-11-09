@@ -47,6 +47,7 @@ void WriteTable(FILE *stream)
 	{
 		nowkey = (*nowrow).keybegin;
 		fprintf(stream,"%d ",(*nowrow).truekey);
+		if((*nowrow).keybegin == NULL) fprintf(stream,"#:# ");
 		while(nowkey != NULL)
 		{
 			fprintf(stream,"%s:%s ",(*nowkey).header,(*nowkey).value);

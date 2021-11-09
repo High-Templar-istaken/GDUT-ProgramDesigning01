@@ -14,7 +14,7 @@ void getrow_n_mode(char *filename, int argc, char* argv[])
 	
 	if(DEBUG) printf("debug: In function 'getrow_n_mode': cntinput=%d WHILE needinput=%d\n",argcnt,(*headerend).code);
 	
-	if(argcnt != (*headerend).code)
+	if(argcnt != (*headerend).code && argcnt != 0)
 	{
 		printf("ERROR: In function 'getrow_n_mode': input value(s) don't match the header(s) ONE BY ONE\n");
 		exit(0);
@@ -28,7 +28,7 @@ void getrow_n_mode(char *filename, int argc, char* argv[])
 	PKEY nowkey = NULL;
 	int cnt = 3;
 	
-	while(nowheader != NULL)
+	while(argcnt != 0 && nowheader != NULL)
 	{
 		nowkey = (PKEY) malloc(sizeof(struct key));
 		(*nowkey).nxtkey = (*nowkey).laskey = NULL;
@@ -46,7 +46,28 @@ void getrow_n_mode(char *filename, int argc, char* argv[])
 	}
 	
 	InsertRow_BackOf(rowend, nowrow);
-	DebugPrintTable();
+//	DebugPrintTable();
+	stream = fopen(filename,"w");
+	WriteTable(stream);
+	fclose(stream); stream = NULL;
+}
+
+void getrow_d_mode(char *filename, char *code)
+{
+	int key = _templar_StringToInt(code);
+	FILE *stream = fopen(filename,"r");
+	ReadTable(stream);
+	fclose(stream); stream = NULL;
+	
+	PROW nowrow = QueryRowTrueKey(key);
+	if(nowrow == NULL)
+	{
+		printf("Error: No such truekey '%d'!\n",key);
+		exit(0);
+	}
+	
+	DeleteRow(nowrow, true);
+	
 	stream = fopen(filename,"w");
 	WriteTable(stream);
 	fclose(stream); stream = NULL;
@@ -58,14 +79,20 @@ void getrow_argument(int argc,char *argv[])
 	{
 		if(strcmp(argv[i],"-n") == 0)
 		{
-			if(argv[i+1] == NULL || argv[i+2] == NULL)
-			{
-				printf("Error: In function 'getrow': Wrong format of argument '-n'\n");
-				exit(0);
-			}
 			//operating both lists
 			getrow_n_mode("./.mycheck/working.txt",argc,argv);
 			getrow_n_mode("./.mycheck/storage.txt",argc,argv);
+			return;
+		}
+		else if(strcmp(argv[i],"-d") == 0)
+		{
+			if(argv[i+1] == NULL)
+			{
+				printf("Error: In function 'getrow': Wrong format of argument '-d'\n");
+				exit(0);
+			}
+			getrow_d_mode("./.mycheck/working.txt",argv[i+1]);
+			getrow_d_mode("./.mycheck/storage.txt",argv[i+1]);
 			return;
 		}
 		/*

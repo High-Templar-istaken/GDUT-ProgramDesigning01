@@ -161,6 +161,52 @@ PROW QueryRowTrueKey(int truekey)
 	return nowrow;
 }
 
+void DeleteRow(PROW del, bool truedelete)
+{
+	//spj
+	if((*rowbegin).nxtrow == NULL)
+	{
+		rowbegin = NULL;
+		rowend = NULL;
+		free(del);
+		return;
+	}
+	
+	PROW now = NULL;
+	PROW pre = NULL;
+	PROW nxt = NULL;
+	/*delete*/
+	if(rowbegin == del) // rowbegin
+	{
+		nxt = (*del).nxtrow;
+		
+		(*nxt).lasrow = NULL;
+		rowbegin = nxt;
+	}
+	else if(rowend == del) //headerend
+	{
+		pre = (*del).lasrow;
+		
+		(*pre).nxtrow = NULL;
+		rowend = pre;
+	}
+	else
+	{
+		pre = (*del).lasrow;
+		nxt = (*del).nxtrow;
+		
+		(*pre).nxtrow = nxt;
+		(*nxt).lasrow = pre;
+	}
+	if(truedelete == true) free(del);
+	else
+	{
+		(*del).lasrow = NULL;
+		(*del).nxtrow = NULL;
+	}
+	return;
+}
+
 void ReadAllRow(FILE *stream)
 {
 	// fill the in-program row
@@ -177,19 +223,15 @@ void ReadAllRow(FILE *stream)
 		//get input
 		fscanf(stream,"%d ",&tmptruekey);
 		_templar_GetTightString_Getline(&line, stream);
+		printf("tempget = %s\n",line);
 		if(strcmp(line, "rowend\n") == 0) return;
+		
+		if(DEBUG) printf("temp:get = %s\n",line);
 		for(int i=0;i<strlen(line);++i)
 		{
-			if(line[i] != ' ' && line[i] != '\n')
-			{
-				break;
-			}
+			if(line[i] != ' ' && line[i] != '\n') break;
 			
-			if(i == strlen(line) - 1)
-			{
-				if(rowbegin == NULL && DEBUG)  printf("debug: In function 'ReadAllRow': no row!\n");
-				return;
-			}
+			if(i == strlen(line) - 1) continue;
 		}
 		
 		nowrow = (PROW) malloc(sizeof(struct row));

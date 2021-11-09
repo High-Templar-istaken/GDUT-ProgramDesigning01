@@ -80,14 +80,14 @@ void DeleteHeader(PHEADER del, bool truedelete)
 	PHEADER pre = NULL;
 	PHEADER nxt = NULL;
 	/*delete*/
-	if((*del).code == 1) // headerbegin
+	if(headerbegin == del) // headerbegin
 	{
 		nxt = (*del).nxtheader;
 		
 		(*nxt).lasheader = NULL;
 		headerbegin = nxt;
 	}
-	else if((*del).nxtheader == NULL) //headerend
+	else if(headerend == del) //headerend
 	{
 		pre = (*del).lasheader;
 		
@@ -198,13 +198,20 @@ void DEBUGShowAllHeader()
 void ReadAllHeader_DevideNextHeaderInput(char *line, int *j, char **first, char **second, char *tmp)//**tmp: avoid too many malloc requests
 {
 	// read first chapter
+	printf("temp: devided nxtheader = %s\n",line);
 	int i = 0;
+	for(int k=0;k<strlen(line);++k)
+	{
+		if(line[k] != ' ' && line[k] != '\n') break;
+		if(k == strlen(line)-1) return;
+	}
+	
 	while(line[(*j)] != ':')
 	{
 		tmp[i++]=line[(*j)++];
 		if(line[(*j)]==' '||line[(*j)]=='\n')
 		{
-			printf("Error: In function 'ReadAllHeader' Wrong format in the header of Working list!\n");
+			printf("Error: In function 'ReadAllHeader_DevideNextHeaderInput' Wrong format in the header of Working list!\n");
 			exit(0);
 		}
 	}
