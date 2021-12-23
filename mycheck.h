@@ -51,6 +51,7 @@ extern int maxtruekey,totheader;
 #include "else.h"
 #include "getheader.h"
 #include "getrow.h"
+#include "getquery.h"
 
 #include "table.h"
 

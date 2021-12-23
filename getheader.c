@@ -16,7 +16,7 @@ void getheader_d_mode(char *filename, char *id)
 	}
 	if(CheckHeaderUnmove(tobe))
 	{
-		printf("Error: Deleting header begin with '#' is not allowed!\n");
+		printf("Error: Deleting header begin with '#' or '-' is not allowed!\n");
 		exit(0);
 	}
 	DeleteHeader(tobe,true);
@@ -37,7 +37,7 @@ void getheader_c_mode(char *filename, int changecode, char *id, char *newvalue)
 	}
 	if(CheckHeaderUnmove(tobe))
 	{
-		printf("Error: Changing header begin with '#' is not allowed!\n");
+		printf("Error: Deleting header begin with '#' or '-' is not allowed!\n");
 		exit(0);
 	}
 	
@@ -84,7 +84,7 @@ void getheader_m_mode(char *filename, char* id,char *offset)
 	
 	if(CheckHeaderUnmove(place) || CheckHeaderUnmove(nowheader))
 	{
-		printf("Error: Moving header begin with '#' is not allowed!\n");
+		printf("Error: Deleting header begin with '#' or '-' is not allowed!\n");
 		exit(0);
 	}
 	
@@ -109,9 +109,9 @@ void getheader_m_mode(char *filename, char* id,char *offset)
 void getheader_n_mode(char *filename, char* id, char* displayname,char *def)
 {
 	if(DEBUG) printf("debug: stream=%s -> getheader_n_mode -> id=%s displayname=%s\n",filename,id,displayname);
-	if(id[0] == '#')
+	if(CheckHeaderUnmove_String(id))
 	{
-		printf("Error: Headerid begin with '#' is not allowed!\n");
+		printf("Error: Headerid begin with '#' or '-' is not allowed!\n");
 		exit(0);
 	}
 	
@@ -153,7 +153,7 @@ void getheader_rn_mode(char *filename, char* id, char *newid)
 	}
 	if(CheckHeaderUnmove(nowheader))
 	{
-		printf("Error: Renaming header begin with '#' is not allowed!\n");
+		printf("Error: Headerid begin with '#' or '-' is not allowed!\n");
 		exit(0);
 	}
 	

@@ -63,7 +63,8 @@ int analyze(int argc, char *argv[])
 				case 6:if(DEBUG) printf("debug: row\n");
 					 back = getrow(argc, argv);
 					break;//row
-				case 7:
+				case 7:if(DEBUG) printf("debug: query\n");
+					 back = getquery(argc, argv);
 					break;//query
 				case 8:
 					break;//sort

@@ -2,7 +2,13 @@
 
 bool CheckHeaderUnmove(PHEADER now)
 {
-	if((*now).id[0] == '#') return true;
+	if((*now).id[0] == '#' || (*now).id[0] == '-') return true;
+	return false;
+}
+
+bool CheckHeaderUnmove_String(char* now)
+{
+	if(now[0] == '#' || now[0] == '-') return true;
 	return false;
 }
 
@@ -145,15 +151,16 @@ void ReleaseShowAllHeader()
 	PHEADER nowheader = headerbegin;
 	PKEY nowkey = NULL;
 	
-	if((*headerend).id[0] == '#')
+	if(CheckHeaderUnmove(headerend))
 	{
 		printf("No Header!\n");
 		return;
 	}
 	
+	if(showcode == true) printf("idH:");
 	while(nowheader != NULL)
 	{
-		if((*nowheader).id[0] == '#')
+		if(CheckHeaderUnmove(nowheader))
 		{
 			nowheader = (*nowheader).nxtheader;
 			continue;

@@ -29,7 +29,7 @@ IncludeVersionInfo=0
 SupportXPThemes=0
 CompilerSet=0
 CompilerSettings=0000000000000000000000000
-UnitCount=22
+UnitCount=25
 
 [VersionInfo]
 Major=1
@@ -251,7 +251,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit23]
-FileName=getrow.c
+FileName=getquery.c
 CompileCpp=0
 Folder=
 Compile=1
@@ -261,11 +261,11 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit24]
-FileName=getrow.h
+FileName=mycheck bash goal.txt
 CompileCpp=0
 Folder=
-Compile=1
-Link=1
+Compile=0
+Link=0
 Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
@@ -282,6 +282,16 @@ BuildCmd=
 
 [Unit22]
 FileName=getrow.h
+CompileCpp=0
+Folder=
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit25]
+FileName=getquery.h
 CompileCpp=0
 Folder=
 Compile=1

@@ -1,0 +1,51 @@
+$ mycheck refresh		: Sync Working list with Storing[?] list ->operating working lists!
+=====================
+$ mycheck display		: Display all datas ->display only working lists!
+-c			: show Code
+=====================
+$ mycheck help		: Get help infomation
+=====================
+$ mycheck init		: Initalize ->operating both lists!
+=====================
+$ mycheck header		->operating both lists!
+
+-n [id] [displayname]		: Create a header which in program named [id] and in table named [displayname]
+				What's more, id cannot repeat with current one
+
+-m [headerid] ,[headerid]	: Move header [id] to [number]'s front
+-m [headerid] .[headerid]	: Move header [id] to [number]'s back
+
+-c=default [id] [newvalue]	: change the default value of [id]
+-c=name [id] [newname]		: change the displayed-name of [id]
+=====================
+$ mycheck row		->operating both lists!
+
+-n [int/string/.]			: Create a new row, your input must Match Every Header ONE BY ONE '.' equals to nothing
+
+-d [row truekey]			: Delete certain row
+
+-m [row truekey] ,[targettruekey]	: Move row [id] to [targettruekey]'s above
+-m [row truekey] .[targettruekey]	: Move row [id] to [targettruekey]'s beneath
+
+-r [row truekey] [headerid] [value]	: modify certain row
+=====================
+$ mycheck query		->operating Working list!
+-merge=or		: Will be displayed when the row satisfy one in all conditions
+-merge=and		: Will be displayed only when the row satisfy all conditions
+DEFAULT -merge=and
+
+-between [headerid] [begin/.] [end/.]		: Work lists only limited in certain ineuqality/no limit when '.'
+-equal [headerid] [value]					: Work lists only limited in certain header's certain value
+=====================
+$ mycheck sort		->operating Working list!
+-b [id]			: Sort which bases on certain [id]'s value, bigger one will get higher rank
+-s				: Sort which bases on certain [id]'s value, smaller one will get higher rank
+RULE			: Bases on the sequence that the arguments input
+=====================
+$mycheck sum		->operating working list
+-h [header id]		: Sum up all columns that in the working list with given header
+=====================
+$mycheck clean		->operating both lists
+=====================
+SORRY FOR MY BAD ENGLISH
+Hope it will be polished soon
