@@ -2,13 +2,22 @@
 
 bool CheckHeaderUnmove(PHEADER now)
 {
-	if((*now).id[0] == '#' || (*now).id[0] == '-') return true;
-	return false;
+	return CheckHeaderUnmove_String((*now).id);
 }
 
 bool CheckHeaderUnmove_String(char* now)
 {
-	if(now[0] == '#' || now[0] == '-') return true;
+	for(int i=0;i<strlen(now);++i)
+	{
+		if(('0'<=now[i]&&now[i]<='9')||('a'<=now[i]&&now[i]<='z')||('A'<=now[i]&&now[i]<='Z')||(now[i]=='_'))
+		{
+			;
+		}
+		else
+		{
+			return true;
+		}
+	}
 	return false;
 }
 

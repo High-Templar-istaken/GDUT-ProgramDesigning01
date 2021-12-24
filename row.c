@@ -253,7 +253,7 @@ void RowDevide(char *source, PROW inrow)
 	PKEY now = NULL;
 	char *tmp = (char*) malloc (sizeof(char)*MAX_INPUT_CACHE);
 	
-	int j = 0, i = 0;
+	int j = 0;
 	while(source[j] == ' ') ++j;
 	while(source[j] != '\n')
 	{

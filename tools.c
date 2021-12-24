@@ -9,13 +9,11 @@ void _templar_GetTightString_Getline(char **_templar_StringName, FILE *stream)
 	_templar_tmp = (char*)malloc(sizeof(char) * MAX_INPUT_CACHE);
 	fgets(_templar_tmp,MAX_INPUT_CACHE,stream);
 	
-	if(DEBUG) printf("debug: In func '_templarstring': Got='%s' len=%d\n",(_templar_tmp),strlen((_templar_tmp)));
+	if(DEBUG) printf("debug: In func '_templarstring': Got='%s' len=%d\n",(_templar_tmp),(int)(strlen((_templar_tmp))));
 	
 	*_templar_StringName = (char*)malloc(sizeof(char) * (strlen(_templar_tmp)+1));
 	strcpy(*_templar_StringName,_templar_tmp);
 	free(_templar_tmp);
-	
-	
 	
 	return;
 }

@@ -111,7 +111,7 @@ void getheader_n_mode(char *filename, char* id, char* displayname,char *def)
 	if(DEBUG) printf("debug: stream=%s -> getheader_n_mode -> id=%s displayname=%s\n",filename,id,displayname);
 	if(CheckHeaderUnmove_String(id))
 	{
-		printf("Error: Headerid begin with '#' or '-' is not allowed!\n");
+		printf("Error: Headerid %s is not allowed!(should only contains numbers or characters or dash '-_')\n",id);
 		exit(0);
 	}
 	

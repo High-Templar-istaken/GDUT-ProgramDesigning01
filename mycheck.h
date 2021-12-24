@@ -6,6 +6,12 @@
 #define PROW struct row*
 #define PHEADER struct header*
 
+struct VLA
+{
+	int *arr;
+	int len,now;
+};
+
 struct key
 {
 	struct key *nxtkey;

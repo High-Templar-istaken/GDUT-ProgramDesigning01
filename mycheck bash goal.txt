@@ -30,12 +30,15 @@ $ mycheck row		->operating both lists!
 -r [row truekey] [headerid] [value]	: modify certain row
 =====================
 $ mycheck query		->operating Working list!
--merge=or		: Will be displayed when the row satisfy one in all conditions
--merge=and		: Will be displayed only when the row satisfy all conditions
-DEFAULT -merge=and
 
 -between [headerid] [begin/.] [end/.]		: Work lists only limited in certain ineuqality/no limit when '.'
--equal [headerid] [value]					: Work lists only limited in certain header's certain value
+-equal [headerid] [value]			: Work lists only limited in certain header's certain value
++  -and
+/  -or
+-l
+-r
+-not
+EXAMPLE: mycheck query -equal id 2 -or -between score 0 59
 =====================
 $ mycheck sort		->operating Working list!
 -b [id]			: Sort which bases on certain [id]'s value, bigger one will get higher rank
