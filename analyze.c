@@ -4,17 +4,16 @@ void analyze_init(char *put[])
 {
 	int tmp=0;
 	#define add put[++tmp]=
-	add"refresh";
+	add"refresh"; // 1
 	add"display";
 	add"help";
 	add"init";
-	add"header";
+	add"header"; // 5
 	add"row";
 	add"query";
 	add"sort";
 	add"sum";
-	add"modify";
-	add"clean";
+	add"config"; // 10
 	add"veryend";
 	return;
 }
@@ -37,6 +36,10 @@ int analyze(int argc, char *argv[])
 	
 	//detect command type
 	int i;
+	
+	
+	
+	if(strcmp("config",argv[1]) != 0 && strcmp("init",argv[1]) != 0) initconfig();
 	
 	for(i=1;strcmp("veryend",command_set[i])!=0;++i)
 	{
@@ -66,14 +69,15 @@ int analyze(int argc, char *argv[])
 				case 7:if(DEBUG) printf("debug: query\n");
 					 back = getquery(argc, argv);
 					break;//query
-				case 8:
+				case 8:if(DEBUG) printf("debug: sort\n");
+					 back = getsort(argc, argv);
 					break;//sort
-				case 9:
+				case 9:if(DEBUG) printf("debug: sum\n");
+					 back = getsum(argc,argv);
 					break;//sum
-				case 10:
-					break;//modify
-				case 11:
-					break;//clean
+				case 10:if(DEBUG) printf("debug: config\n");
+					 back = getconfig(argc,argv);
+					break;//config
 				case 12:printf("Error: In function 'analyze': Unknown command '%s'\n",argv[1]);
 					break;//WTF
 			}

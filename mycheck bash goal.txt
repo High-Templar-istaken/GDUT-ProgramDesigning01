@@ -35,20 +35,28 @@ $ mycheck query		->operating Working list!
 -equal [headerid] [value]			: Work lists only limited in certain header's certain value
 +  -and
 /  -or
--l
--r
--not
-EXAMPLE: mycheck query -equal id 2 -or -between score 0 59
+(  -l
+)  -r
+!  -not
+EXAMPLE: mycheck query ( -between c 3 6 + -equal b I ) / ! -equal a #
 =====================
 $ mycheck sort		->operating Working list!
--b [id]			: Sort which bases on certain [id]'s value, bigger one will get higher rank
--s				: Sort which bases on certain [id]'s value, smaller one will get higher rank
-RULE			: Bases on the sequence that the arguments input
+-bigger [headerid]		: Sort which bases on certain [id]'s value, bigger one will get higher rank
+-smaller [headerid]		: Sort which bases on certain [id]'s value, smaller one will get higher rank
++  -and
+/  -or
+(  -l
+)  -r
+!  -not
+EXAMPLE: mycheck sort ( -bigger a -or -smaller b ) -and -bigger c
 =====================
 $mycheck sum		->operating working list
--h [header id]		: Sum up all columns that in the working list with given header
+[header id]		: Sum up all columns that in the working list with given header
 =====================
-$mycheck clean		->operating both lists
+$mycheck config		-> 
+-m [tag/code] [value]
+-list
+-reset
 =====================
 SORRY FOR MY BAD ENGLISH
 Hope it will be polished soon

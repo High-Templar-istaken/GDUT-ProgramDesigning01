@@ -39,7 +39,6 @@ struct header
 extern PHEADER headerbegin;
 extern PHEADER headerend;
 
-extern const int MAX_INPUT_CACHE;
 extern bool showcode;
 extern int maxtruekey,totheader;
 
@@ -58,9 +57,15 @@ extern int maxtruekey,totheader;
 #include "getheader.h"
 #include "getrow.h"
 #include "getquery.h"
+#include "getsum.h"
+#include "getsort.h"
+#include "getconfig.h"
 
 #include "table.h"
 
-extern const bool DEBUG;
+extern bool DEBUG;
+extern int MAX_INPUT_CACHE;
+extern bool AlwaysShowtable;
+extern bool ExitMute;
 
 #endif

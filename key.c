@@ -11,13 +11,8 @@ int ValueCmp(char *a,char *b)
 		if(strlen(a) != 1) ++i;
 		else bothdigit = false;
 	}
-	for(;bothdigit && i<strlen(a);++i)
-	{
-		if(!isdigit(a[i]))
-		{
-			bothdigit = false;
-		}
-	}
+	
+	bothdigit &= _templar_JudgeStringIsNumber(a+i);
 	
 	i = 0;
 	if(b[0] == '-' || b[0] == '+')
@@ -25,21 +20,14 @@ int ValueCmp(char *a,char *b)
 		if(strlen(b) != 1) ++i;
 		else bothdigit = false;
 	}
-	
-	for(;bothdigit && i<strlen(b);++i)
-	{
-		if(!isdigit(b[i]))
-		{
-			bothdigit = false;
-		}
-	}
+	bothdigit &= _templar_JudgeStringIsNumber(b+i);
 	
 	if(bothdigit)
 	{
-		int va = _templar_StringToInt(a), vb = _templar_StringToInt(b);
+		int va = _templar_StringToNumber(a), vb = _templar_StringToNumber(b);
 		if(va < vb) return -1;
-		if(va == vb) return 0;
-		if(va > vb) return 1;
+		else if(va == vb) return 0;
+		else if(va > vb) return 1;
 	}
 	else return strcmp(a,b);
 }

@@ -45,14 +45,18 @@ void getrow_n_mode(char *filename, int argc, char* argv[])
 		nowkey = (PKEY) malloc(sizeof(struct key));
 		(*nowkey).nxtkey = (*nowkey).laskey = NULL;
 		
-		(*nowkey).value = (char*) malloc(sizeof(char)*strlen(argv[cnt]));
-		strcpy((*nowkey).value, argv[cnt]);
+		if(strcmp(argv[cnt] , ".") != 0)
+		{
+			(*nowkey).value = (char*) malloc(sizeof(char)*strlen(argv[cnt]));
+			strcpy((*nowkey).value, argv[cnt]);
+			
+			(*nowkey).header = (char*) malloc(sizeof(char)*strlen((*nowheader).id));
+			strcpy((*nowkey).header, (*nowheader).id);
+			
+			InsertKey_BackOf((*nowrow).keyend, nowkey, nowrow);
+		}
+		
 		++cnt;
-		
-		(*nowkey).header = (char*) malloc(sizeof(char)*strlen((*nowheader).id));
-		strcpy((*nowkey).header, (*nowheader).id);
-		
-		InsertKey_BackOf((*nowrow).keyend, nowkey, nowrow);
 		
 		nowheader = (*nowheader).nxtheader;
 	}
@@ -64,7 +68,7 @@ void getrow_n_mode(char *filename, int argc, char* argv[])
 
 void getrow_d_mode(char *filename, char *code)
 {
-	int key = _templar_StringToInt(code);
+	int key = _templar_StringToNumber(code);
 	ReadTable(filename);
 	
 	PROW nowrow = QueryRowTrueKey(key);
@@ -96,8 +100,8 @@ void getrow_m_mode(char *filename, char *tobekey, char *placekey)
 	
 	
 	
-	int tobetruekey = _templar_StringToInt(tobekey);
-	int placetruekey = _templar_StringToInt(placekey+1);
+	int tobetruekey = _templar_StringToNumber(tobekey);
+	int placetruekey = _templar_StringToNumber(placekey+1);
 	
 	PROW tobe = QueryRowTrueKey(tobetruekey);
 	PROW place = QueryRowTrueKey(placetruekey);
@@ -138,7 +142,7 @@ void getrow_r_mode(char *filename, char *key, char *headerid, char *value)
 		printf("Error: Colon ':' was not allowed in the key!\n");
 		exit(0);
 	}
-	int truekey = _templar_StringToInt(key);
+	int truekey = _templar_StringToNumber(key);
 	
 	ReadTable(filename);
 	

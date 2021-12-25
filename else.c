@@ -2,6 +2,8 @@
 
 int refresh(int argc,char *argv[])
 {
+	ReadTable("./.mycheck/working.txt");
+	
 	for(int i = 2; argv[i] != NULL ; ++i)
 	{
 		printf("Error: In function 'refresh': Unknown input argument '%s'\n", argv[i]);
@@ -49,7 +51,9 @@ int getinit(int argc,char *argv[])
 	fprintf(storage,"0\n##:## \n##:## \nrowend\n \n \n");
 	FILE *working = fopen("./.mycheck/working.txt","w");
 	fprintf(working,"0\n##:## \n##:## \nrowend\n \n \n");
-	fclose(working);fclose(storage);
+	FILE *config = fopen("./.mycheck/config.txt","w");
+	fprintf(config,"0\n10001\n1\n0\n");
+	fclose(working);fclose(storage);fclose(config);
 	
 	return 0;
 }

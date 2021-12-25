@@ -1,8 +1,9 @@
 #include "mycheck.h"
-/* run this program using the console pauser or add your own getch, system("pause") or input loop */
 
-const bool DEBUG = false;
-const int MAX_INPUT_CACHE=10001;
+bool DEBUG = false;
+int MAX_INPUT_CACHE = 10001;
+bool AlwaysShowtable = false;
+bool ExitMute = false;
 
 PROW rowbegin;
 PROW rowend;
@@ -18,20 +19,19 @@ int main(int argc, char *argv[])
 	
 	switch(analyze(argc,argv))
 	{
-		case 0:printf("Program End safely.\n");
+		case 0:if(ExitMute != true) printf("Program End safely.\n");
 			break;
 		case -1:printf("Fatal Error: No argument input!\n");
 			break;
 		case -2:printf("Error: Unknown command type when analyzing\n");
 			break;
-		case -3:printf("Error: Run time error\n");
-			break;
 		default:printf("Error: Unexpected return value from function 'analyze'\n");
 			break;
 	}
-	/*
-	system("pause");
-	system("chcp 936");   //set charset back to GBK
-	*/
+	
+	if(AlwaysShowtable == true)
+	{
+		ReleasePrintTable();
+	}
 	return 0;
 }
