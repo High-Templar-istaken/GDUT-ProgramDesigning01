@@ -1,5 +1,20 @@
 #include "mycheck.h"
 
+void initconfig()
+{
+	FILE *config = fopen("./.mycheck/config.txt","r");
+	
+	/*debug cache showtable*/
+	if(fscanf(config,"%d%d%d%d",&DEBUG,&MAX_INPUT_CACHE,&AlwaysShowtable,&ExitMute) != 4)
+	{
+		printf("Fatal Error: Failed to read the config. Try to use 'mycheck config -reset' to recover.\n");
+		exit(0);
+	}
+	
+	fclose(config);
+	return;
+}
+
 void ReadTable(char *filename)
 {
 	FILE *stream = fopen(filename,"r");

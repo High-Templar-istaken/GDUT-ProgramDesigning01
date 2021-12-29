@@ -22,21 +22,28 @@ bool JudgePlacing(PROW moving, PROW stable, char *argv[])
 			{
 				movingkey = QueryKeyHeader(moving,argv[i+1]);
 				stablekey = QueryKeyHeader(stable,argv[i+1]);
-				if(stablekey == NULL)
+				
+				int r;
+				
+				if(stablekey == NULL && movingkey == NULL)
 				{
-					_templar_vla_push(&Function,1);
+					r=ValueCmp(QueryHeaderID(argv[i+1])->def,QueryHeaderID(argv[i+1])->def);
+				}
+				else if(stablekey == NULL)
+				{
+					r=ValueCmp((*movingkey).value,QueryHeaderID(argv[i+1])->def);
 				}
 				else if(movingkey == NULL)
 				{
-					_templar_vla_push(&Function,0);
+					r=ValueCmp(QueryHeaderID(argv[i+1])->def,(*stablekey).value);
 				}
 				else
 				{
-					int r=ValueCmp((*movingkey).value,(*stablekey).value);
-				
-					if(r == 1) _templar_vla_push(&Function,1);
-					else _templar_vla_push(&Function,0);
+					r=ValueCmp((*movingkey).value,(*stablekey).value);
 				}
+				if(r == 1) _templar_vla_push(&Function,1);
+				else _templar_vla_push(&Function,0);
+				
 			}
 			i+=2;
 		}
@@ -51,21 +58,28 @@ bool JudgePlacing(PROW moving, PROW stable, char *argv[])
 			{
 				movingkey = QueryKeyHeader(moving,argv[i+1]);
 				stablekey = QueryKeyHeader(stable,argv[i+1]);
-				if(stablekey == NULL)
+				
+				int r;
+				
+				if(stablekey == NULL && movingkey == NULL)
 				{
-					_templar_vla_push(&Function,0);
+					r=ValueCmp(QueryHeaderID(argv[i+1])->def,QueryHeaderID(argv[i+1])->def);
+				}
+				else if(stablekey == NULL)
+				{
+					r=ValueCmp((*movingkey).value,QueryHeaderID(argv[i+1])->def);
 				}
 				else if(movingkey == NULL)
 				{
-					_templar_vla_push(&Function,1);
+					r=ValueCmp(QueryHeaderID(argv[i+1])->def,(*stablekey).value);
 				}
 				else
 				{
-					int r=ValueCmp((*movingkey).value,(*stablekey).value);
-				
-					if(r == -1) _templar_vla_push(&Function,1);
-					else _templar_vla_push(&Function,0);
+					r=ValueCmp((*movingkey).value,(*stablekey).value);
 				}
+				
+				if(r == -1) _templar_vla_push(&Function,1);
+				else _templar_vla_push(&Function,0);
 			}
 			i+=2;
 		}

@@ -25,7 +25,7 @@ struct row
 	struct key *keybegin, *keyend;
 	struct row *nxtrow;
 	struct row *lasrow;// should be named 'pre...' but I can't rename it :(
-	int truekey;
+	long long truekey;
 };
 extern PROW rowbegin;
 extern PROW rowend;
@@ -40,7 +40,7 @@ extern PHEADER headerbegin;
 extern PHEADER headerend;
 
 extern bool showcode;
-extern int maxtruekey,totheader;
+extern long long maxtruekey,totheader;
 
 #include <stdio.h>
 #include <stdlib.h>

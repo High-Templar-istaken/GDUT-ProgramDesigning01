@@ -29,6 +29,10 @@ int getsum(int argc,char *argv[])
 		{
 			sum+=_templar_StringToNumber((*nowkey).value);
 		}
+		else
+		{
+			sum+=_templar_StringToNumber(QueryHeaderID(header)->def);
+		}
 		nowrow = (*nowrow).nxtrow;
 	}
 	
