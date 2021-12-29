@@ -89,7 +89,7 @@ bool logical_calc(struct VLA f)
 			}
 			else // or and
 			{
-				if(i==0 || f.arr[i-1]==-1 || f.arr[i-1]==-5)
+				if(i==0 || f.arr[i-1]==-1 || f.arr[i-1]==-5 || f.arr[i-1]==-4 || f.arr[i-1]==-2 )
 				{
 					printf("ERROR: Wrong operators!\n");
 					exit(0);

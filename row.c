@@ -82,7 +82,7 @@ void ReleaseShowAllRow()
 		if(showcode) printf("(%d):",(*nowrow).truekey);
 		while(nowheader != NULL)
 		{
-			if(CheckHeaderUnmove(nowheader))
+			if(CheckHeaderLegitByPointer(nowheader))
 			{
 				nowheader = (*nowheader).nxtheader;
 				continue;
@@ -217,7 +217,7 @@ void ReadAllRow(FILE *stream)
 		_templar_GetTightString_Getline(&line, stream);
 		if(strcmp(line, "rowend\n") == 0) return;
 		
-		if(DEBUG) printf("temp:get = %s\n",line);
+		if(DEBUG) printf("debug:get = %s\n",line);
 		for(int i=0;i<strlen(line);++i)
 		{
 			if(line[i] != ' ' && line[i] != '\n') break;
@@ -262,7 +262,7 @@ void RowDevide(char *source, PROW inrow)
 		
 		ReadAllHeader_DevideNextHeaderInput(source, &j, &((*now).header), &((*now).value), tmp);
 		
-		InsertKey_BackOf((*inrow).keyend , now, inrow);
+		InsertKey_BackOf((*inrow).keyend,now,inrow);
 		
 		while(source[j] == ' ' || source[j] == ':') ++j; //skip the devide char ' '&':'
 	}

@@ -23,6 +23,7 @@ void getrow_n_mode(char *filename, int argc, char* argv[])
 	if(argcnt != totheader-1 && argcnt != 0)
 	{
 		printf("ERROR: In function 'getrow_n_mode': input value(s) don't match the header(s) ONE BY ONE\n");
+		printf("Needed %d but inputed %d\n",totheader-1,argcnt);
 		exit(0);
 	}
 	
@@ -34,9 +35,14 @@ void getrow_n_mode(char *filename, int argc, char* argv[])
 	PKEY nowkey = NULL;
 	int cnt = 3;
 	
+	
+	/*
+		if argcnt == 0
+		This row will contain nothing and the loop will be ended safely
+	*/
 	while(argcnt != 0 && nowheader != NULL)
 	{
-		if(CheckHeaderUnmove(nowheader))
+		if(CheckHeaderLegitByPointer(nowheader))
 		{
 			nowheader = (*nowheader).nxtheader;
 			continue;

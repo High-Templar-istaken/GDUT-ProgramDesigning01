@@ -14,7 +14,7 @@ void getheader_d_mode(char *filename, char *id)
 		printf("Error: In function 'getheader_d_mode': No such ID '%s'!",id);
 		exit(0);
 	}
-	if(CheckHeaderUnmove(tobe))
+	if(CheckHeaderLegitByPointer(tobe))
 	{
 		printf("Error: Deleting header begin with '#' or '-' is not allowed!\n");
 		exit(0);
@@ -35,7 +35,7 @@ void getheader_c_mode(char *filename, int changecode, char *id, char *newvalue)
 		printf("Error: In function 'getheader_c_mode': No such ID '%s'!",id);
 		exit(0);
 	}
-	if(CheckHeaderUnmove(tobe))
+	if(CheckHeaderLegitByPointer(tobe))
 	{
 		printf("Error: Deleting header begin with '#' or '-' is not allowed!\n");
 		exit(0);
@@ -82,7 +82,7 @@ void getheader_m_mode(char *filename, char* id,char *offset)
 		exit(0);
 	}
 	
-	if(CheckHeaderUnmove(place) || CheckHeaderUnmove(nowheader))
+	if(CheckHeaderLegitByPointer(place) || CheckHeaderLegitByPointer(nowheader))
 	{
 		printf("Error: Deleting header begin with '#' or '-' is not allowed!\n");
 		exit(0);
@@ -109,7 +109,7 @@ void getheader_m_mode(char *filename, char* id,char *offset)
 void getheader_n_mode(char *filename, char* id, char* displayname,char *def)
 {
 	if(DEBUG) printf("debug: stream=%s -> getheader_n_mode -> id=%s displayname=%s\n",filename,id,displayname);
-	if(CheckHeaderUnmove_String(id))
+	if(CheckHeaderLegitByString(id))
 	{
 		printf("Error: Headerid %s is not allowed!(should only contains numbers or characters or dash '-_')\n",id);
 		exit(0);
@@ -151,7 +151,7 @@ void getheader_rn_mode(char *filename, char* id, char *newid)
 		printf("Error: In function 'getheader_rn_mode': No such header ID '%s'!\n",id);
 		exit(0);
 	}
-	if(CheckHeaderUnmove(nowheader))
+	if(CheckHeaderLegitByPointer(nowheader))
 	{
 		printf("Error: Headerid begin with '#' or '-' is not allowed!\n");
 		exit(0);

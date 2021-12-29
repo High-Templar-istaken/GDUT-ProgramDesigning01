@@ -30,6 +30,9 @@ int ValueCmp(char *a,char *b)
 		else if(va > vb) return 1;
 	}
 	else return strcmp(a,b);
+	
+	// unreachable
+	return -1;
 }
 
 PKEY QueryKeyHeader(PROW inrow, char *target)

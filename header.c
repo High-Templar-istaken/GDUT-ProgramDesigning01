@@ -1,19 +1,16 @@
 #include "mycheck.h"
 
-bool CheckHeaderUnmove(PHEADER now)
+bool CheckHeaderLegitByPointer(PHEADER now)
 {
-	return CheckHeaderUnmove_String((*now).id);
+	return CheckHeaderLegitByString((*now).id);
 }
 
-bool CheckHeaderUnmove_String(char* now)
+
+bool CheckHeaderLegitByString(char* now) // true = not legit
 {
 	for(int i=0;i<strlen(now);++i)
 	{
-		if(('0'<=now[i]&&now[i]<='9')||('a'<=now[i]&&now[i]<='z')||('A'<=now[i]&&now[i]<='Z')||(now[i]=='_'))
-		{
-			;
-		}
-		else
+		if(!(('0'<=now[i]&&now[i]<='9')||('a'<=now[i]&&now[i]<='z')||('A'<=now[i]&&now[i]<='Z')||(now[i]=='_')))
 		{
 			return true;
 		}
@@ -160,7 +157,7 @@ void ReleaseShowAllHeader()
 	PHEADER nowheader = headerbegin;
 	PKEY nowkey = NULL;
 	
-	if(CheckHeaderUnmove(headerend))
+	if(CheckHeaderLegitByPointer(headerend))
 	{
 		printf("No Header!\n");
 		return;
@@ -169,7 +166,7 @@ void ReleaseShowAllHeader()
 	if(showcode == true) printf("idH:");
 	while(nowheader != NULL)
 	{
-		if(CheckHeaderUnmove(nowheader))
+		if(CheckHeaderLegitByPointer(nowheader))
 		{
 			nowheader = (*nowheader).nxtheader;
 			continue;
@@ -205,7 +202,8 @@ void DEBUGShowAllHeader()
 	}
 }
 
-void ReadAllHeader_DevideNextHeaderInput(char *line, int *j, char **first, char **second, char *tmp)//**tmp: avoid too many malloc requests
+void ReadAllHeader_DevideNextHeaderInput(char *line, int *j, char **first, char **second, char *tmp)
+//**tmp: avoiding too many malloc requests
 {
 	// read first chapter
 	int i = 0;

@@ -20,6 +20,12 @@ bool JudgePlacing(PROW moving, PROW stable, char *argv[])
 			}
 			else
 			{
+				if(QueryHeaderID(argv[i+1]) == NULL)
+				{
+					printf("In function 'JudgePlacing': No such header '%s' existed!\n",argv[i+1]);
+					exit(0);
+				}
+				
 				movingkey = QueryKeyHeader(moving,argv[i+1]);
 				stablekey = QueryKeyHeader(stable,argv[i+1]);
 				
@@ -58,6 +64,11 @@ bool JudgePlacing(PROW moving, PROW stable, char *argv[])
 			{
 				movingkey = QueryKeyHeader(moving,argv[i+1]);
 				stablekey = QueryKeyHeader(stable,argv[i+1]);
+				if(QueryHeaderID(argv[i+1]) == NULL)
+				{
+					printf("In function 'JudgePlacing': No such header '%s' existed!\n",argv[i+1]);
+					exit(0);
+				}
 				
 				int r;
 				
