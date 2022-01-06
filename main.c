@@ -22,10 +22,13 @@ int main(int argc, char *argv[])
 		case 0:if(ExitMute != true) printf("Program End safely.\n");
 			break;
 		case -1:printf("Fatal Error: No argument input!\n");
+			AlwaysShowtable = false;
 			break;
 		case -2:printf("Error: Unknown command type when analyzing\n");
+			AlwaysShowtable = false;
 			break;
 		default:printf("Error: Unexpected return value from function 'analyze'\n");
+			AlwaysShowtable = false;
 			break;
 	}
 	

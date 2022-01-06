@@ -11,9 +11,11 @@ $ mycheck header		->operating both lists!
 
 -n [id] [displayname]		: Create a header which in program named [id] and in table named [displayname]
 				What's more, id cannot repeat with current one
-
+-d [headerid]
 -m [headerid] ,[headerid]	: Move header [id] to [number]'s front
 -m [headerid] .[headerid]	: Move header [id] to [number]'s back
+
+-rn [headerid] [newid]		: rename header [id] to [newid]
 
 -c=default [id] [newvalue]	: change the default value of [id]
 -c=name [id] [newname]		: change the displayed-name of [id]
@@ -28,6 +30,7 @@ $ mycheck row		->operating both lists!
 -m [row truekey] .[targettruekey]	: Move row [id] to [targettruekey]'s beneath
 
 -r [row truekey] [headerid] [value]	: modify certain row
+-kd [truekey] [headerid]		: delete certail key
 =====================
 $ mycheck query		->operating Working list!
 

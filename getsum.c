@@ -45,8 +45,8 @@ void getsum_numrow_mode()
 		nowrow = (*nowrow).nxtrow;
 	}
 	
-	if(ExitMute == false) printf("rows remain: %d\n",cnt);
-	else printf("%d",cnt);
+	if(ExitMute == false) printf("rows remain: %d\n",cnt-1);// except the ##:##
+	else printf("%d",cnt); 
 	
 	return;
 }

@@ -32,7 +32,7 @@ int gethelp(int argc,char *argv[])
 		exit(0);
 	}
 	
-	printf("to be finished...\n");
+	printf("Check \"Mycheck manual.chm\" in the same directory to get more information.\n");
 	return 0;
 }
 

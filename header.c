@@ -93,7 +93,7 @@ void DeleteHeader(PHEADER del, bool truedelete)
 	{
 		headerbegin = NULL;
 		headerend = NULL;
-		free(del);
+		if(truedelete == true) free(del);
 		return;
 	}
 	

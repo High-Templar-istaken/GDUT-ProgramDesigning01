@@ -183,6 +183,40 @@ void getrow_r_mode(char *filename, char *key, char *headerid, char *value)
 	WriteTable(filename);
 }
 
+void getrow_kd_mode(char *filename, char *truekey, char *headerid)
+{
+	ReadTable(filename);
+	
+	if(_templar_JudgeStringIsNumber(truekey) == false)
+	{
+		printf("Error: '%s' is not a number\n");
+		exit(0);
+	}
+	
+	PROW inrow = QueryRowTrueKey(_templar_StringToNumber(truekey));
+	PHEADER inheader = QueryHeaderID(headerid);
+	PKEY inkey = NULL;
+	if(inrow == NULL)
+	{
+		printf("Error: No such row '%s'!\n",truekey);
+		exit(0);
+	}
+	if(inheader == NULL)
+	{
+		printf("Error: No such header '%s'!\n",headerid);
+		exit(0);
+	}
+	inkey = QueryKeyHeader(inrow,headerid);
+	if(inkey == NULL)
+	{
+		printf("Error: No such key %s:%s!\n",truekey,headerid);
+		exit(0);
+	}
+	DeleteKey(inkey,inrow);
+	
+	WriteTable(filename);
+}
+
 void getrow_argument(int argc,char *argv[])
 {
 	for(int i = 2 ; argv[i] != NULL ; ++i)
@@ -230,6 +264,18 @@ void getrow_argument(int argc,char *argv[])
 			return;
 		}
 		
+		else if(strcmp(argv[i],"-kd") == 0)
+		{
+			if(argv[i+1] == NULL || argv[i+2] == NULL)
+			{
+				printf("Error: In function 'getrow': Wrong format of argument '-kd'\n");
+				exit(0);
+			}
+			
+			getrow_kd_mode("./.mycheck/working.txt",argv[i+1],argv[i+2]);
+			getrow_kd_mode("./.mycheck/storage.txt",argv[i+1],argv[i+2]);
+			return;
+		}
 		else
 		{
 			printf("Error: In function 'getrow': Unknown argument '%s'\n", argv[i]);
@@ -237,6 +283,8 @@ void getrow_argument(int argc,char *argv[])
 		}
 	}
 }
+
+
 
 int getrow(int argc,char *argv[])
 {

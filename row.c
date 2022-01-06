@@ -160,7 +160,7 @@ void DeleteRow(PROW del, bool truedelete)
 	{
 		rowbegin = NULL;
 		rowend = NULL;
-		free(del);
+		if(truedelete == true) free(del);
 		return;
 	}
 	

@@ -26,5 +26,7 @@ int display(int argc, char *argv[])
 	ReleasePrintTable();
 	
 	if(DEBUG) printf("debug: Display safely\n");
+	
+	AlwaysShowtable = false; 
 	return 0;
 }

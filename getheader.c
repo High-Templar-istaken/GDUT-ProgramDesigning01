@@ -156,6 +156,11 @@ void getheader_rn_mode(char *filename, char* id, char *newid)
 		printf("Error: Headerid begin with '#' or '-' is not allowed!\n");
 		exit(0);
 	}
+	if(QueryHeaderID(newid) != NULL)
+	{
+		printf("Error: You can't rename a header as an already existed ID!\n");
+		exit(0);
+	}
 	
 	free((*nowheader).id);
 	(*nowheader).id = newid;

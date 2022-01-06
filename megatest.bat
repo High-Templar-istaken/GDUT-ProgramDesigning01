@@ -50,15 +50,20 @@ pause
 mycheck refresh
 mycheck config -list
 mycheck config -m 1 1
-mycheck sum c
+mycheck sum -add c
 mycheck config -m 1 0
-mycheck sum a
+mycheck sum -add a
 pause
 mycheck config -m 2 101
 mycheck config -m 4 1
-mycheck sum c
+mycheck sum -add c
 mycheck config -m 3 0
-mycheck sum c
+mycheck sum -add c
 mycheck config -reset
-mycheck sum c
+mycheck sum -add c
+mycheck sum -num c
+pause
+
+pause
+
 pause
