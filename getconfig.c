@@ -3,7 +3,7 @@
 void getconfig_m_mode(int argc, char *argv[])
 {
 	initconfig();
-	FILE *config = fopen("./.mycheck/config.txt","w");
+	
 	if(argv[3] == NULL || argv[4] == NULL)
 	{
 		printf("Error: In function 'getconfig': Wrong input of '-m' argument!\n");
@@ -50,6 +50,7 @@ void getconfig_m_mode(int argc, char *argv[])
 		printf("Error: In function 'getconfig': Wrong input '%s' of '-m' argument!\n",argv[3]);
 		exit(0);
 	}
+	FILE *config = fopen("./.mycheck/config.txt","w");
 	fprintf(config,"%d\n%d\n%d\n%d\n",DEBUG,MAX_INPUT_CACHE,AlwaysShowtable,ExitMute);
 	fclose(config);
 }

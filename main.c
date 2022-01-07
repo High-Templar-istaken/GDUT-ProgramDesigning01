@@ -2,7 +2,7 @@
 
 bool DEBUG = false;
 int MAX_INPUT_CACHE = 10001;
-bool AlwaysShowtable = false;
+int AlwaysShowtable = false;
 bool ExitMute = false;
 
 PROW rowbegin;
@@ -32,8 +32,9 @@ int main(int argc, char *argv[])
 			break;
 	}
 	
-	if(AlwaysShowtable == true)
+	if(AlwaysShowtable != 0)
 	{
+		if(AlwaysShowtable < 0)  showcode = true;
 		ReleasePrintTable();
 	}
 	return 0;

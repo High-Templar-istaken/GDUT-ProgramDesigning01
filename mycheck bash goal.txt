@@ -30,6 +30,7 @@ $ mycheck row		->operating both lists!
 -m [row truekey] .[targettruekey]	: Move row [id] to [targettruekey]'s beneath
 
 -r [row truekey] [headerid] [value]	: modify certain row
+
 -kd [truekey] [headerid]		: delete certail key
 =====================
 $ mycheck query		->operating Working list!

@@ -65,7 +65,7 @@ extern long long maxtruekey,totheader;
 
 extern bool DEBUG;
 extern int MAX_INPUT_CACHE;
-extern bool AlwaysShowtable;
+extern int AlwaysShowtable;
 extern bool ExitMute;
 
 #endif
