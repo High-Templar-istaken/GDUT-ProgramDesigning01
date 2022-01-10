@@ -54,9 +54,10 @@ $ mycheck sort		->operating Working list!
 !  -not
 EXAMPLE: mycheck sort ( -bigger a -or -smaller b ) -and -bigger c
 =====================
-$mycheck stat		->operating working list
+$mycheck sum		->operating working list
 -add [header id]	: Sum up all columns that in the working list with given header
--num			: Calculate how many rows remain
+-num=row		: Calculate how many rows remain
+-num=header
 =====================
 $mycheck config		-> 
 -m [tag/code] [value]

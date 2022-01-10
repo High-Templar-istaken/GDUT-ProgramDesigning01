@@ -35,6 +35,7 @@ int main(int argc, char *argv[])
 	if(AlwaysShowtable != 0)
 	{
 		if(AlwaysShowtable < 0)  showcode = true;
+		ReadTable("./.mycheck/working.txt");
 		ReleasePrintTable();
 	}
 	return 0;

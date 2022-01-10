@@ -6,12 +6,14 @@
 #define PROW struct row*
 #define PHEADER struct header*
 
+/*变长度数组类型*/
 struct VLA
 {
 	int *arr;
 	int len,now;
 };
 
+/*双向链表 ×3*/
 struct key
 {
 	struct key *nxtkey;
@@ -63,6 +65,7 @@ extern long long maxtruekey,totheader;
 
 #include "table.h"
 
+/*四大配置*/
 extern bool DEBUG;
 extern int MAX_INPUT_CACHE;
 extern int AlwaysShowtable;
