@@ -63,7 +63,14 @@ mycheck config -reset
 mycheck sum -add c
 mycheck sum -num c
 pause
-
+mycheck port -e porttest.txt
+mycheck row -n
+mycheck row -n
+mycheck row -n
+mycheck row -n
+mycheck display -c
+mycheck port -i porttest.txt
+mycheck display -c
 pause
-
+echo 测试结束
 pause

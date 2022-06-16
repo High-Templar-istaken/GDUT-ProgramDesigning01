@@ -59,10 +59,14 @@ $mycheck sum		->operating working list
 -num=row		: Calculate how many rows remain
 -num=header
 =====================
-$mycheck config		-> 
+$mycheck config		-> Yep it will change some configs
 -m [tag/code] [value]
 -list
 -reset
 =====================
-SORRY FOR MY BAD ENGLISH
-Hope it will be polished soon
+$mycheck export 		-> export table
+
+
+
+
+

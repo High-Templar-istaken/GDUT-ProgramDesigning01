@@ -32,7 +32,9 @@ int gethelp(int argc,char *argv[])
 		exit(0);
 	}
 	
-	printf("Check \"Mycheck manual.chm\" in the same directory to get more information.\n");
+	/*bat again oops*/
+	system("\".\\MANUAL\\UTF8 Boost.html\"");
+	printf("A browser is required.\n");
 	return 0;
 }
 
@@ -54,6 +56,53 @@ int getinit(int argc,char *argv[])
 	FILE *config = fopen("./.mycheck/config.txt","w");
 	fprintf(config,"0\n10001\n1\n0\n");
 	fclose(working);fclose(storage);fclose(config);
+	
+	return 0;
+}
+
+int getport(int argc,char *argv[])
+{
+	if(argv[2] == NULL || argv[3] == NULL){
+		printf("Error: In function 'getport': argument 2 is required.\n");
+		exit(0);
+	}
+	for(int i = 4; argv[i] != NULL ; ++i)
+	{
+		printf("Error: In function 'getport': Unknown input argument '%s'\n", argv[i]);
+		exit(0);
+	}
+	
+	if(strcmp("-e",argv[2])==0){
+		char tmps[]="copy /a /v .\\.mycheck\\working.txt ";
+		char *command1 = (char*)malloc(sizeof(argv[3])+sizeof(tmps));
+		memset(command1,'\0',sizeof(command1));
+		
+		
+		strcat(command1,tmps);
+		strcat(command1,argv[3]);
+		
+		/*Using Windows' bash due to potential bugs and i dont want to debug*/
+		system(command1);
+	}
+	else if(strcmp("-i",argv[2])==0){
+		
+		char tmps1[]="copy /a ";
+		char tmps2[]=" .\\.mycheck\\working.txt";
+		
+		char *command2 = (char*)malloc(sizeof(argv[3])+sizeof(tmps1)+sizeof(tmps2));
+		memset(command2,'\0',sizeof(command2));
+		
+		
+		strcat(command2,tmps1);
+		strcat(command2,argv[3]);
+		strcat(command2,tmps2);
+		
+		system(command2);
+	}
+	else{
+		printf("Error: In function 'getport': Unknown input argument '%s'\n", argv[2]);
+		exit(0);
+	}
 	
 	return 0;
 }

@@ -14,6 +14,7 @@ void analyze_init(char *put[])
 	add"sort";
 	add"sum";
 	add"config"; // 10
+	add"port";
 	add"veryend";
 	return;
 }
@@ -78,6 +79,9 @@ int analyze(int argc, char *argv[])
 				case 10:if(DEBUG) printf("debug: config\n");
 					 back = getconfig(argc,argv);
 					break;//config
+				case 11:if(DEBUG) printf("debug: export\n");
+					 back = getport(argc,argv);
+					 break;
 				case 12:printf("Error: In function 'analyze': Unknown command '%s'\n",argv[1]);
 					break;//WTF
 			}
